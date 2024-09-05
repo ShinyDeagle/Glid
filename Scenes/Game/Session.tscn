@@ -1,15 +1,51 @@
-[gd_scene load_steps=11 format=3 uid="uid://eyaqe0owntkc"]
+[gd_scene load_steps=18 format=3 uid="uid://eyaqe0owntkc"]
 
+[ext_resource type="Script" path="res://Scenes/Game/Session.gd" id="1_ep0gm"]
 [ext_resource type="PackedScene" uid="uid://hnci44c8shhb" path="res://Scenes/Game/Player.tscn" id="1_ki1s4"]
 [ext_resource type="PackedScene" uid="uid://nh7jhv57lm1w" path="res://Scenes/Game/Deck.tscn" id="1_ltllm"]
 [ext_resource type="PackedScene" uid="uid://blahpjlpjlsi2" path="res://Scenes/Game/Card.tscn" id="1_ot707"]
 [ext_resource type="PackedScene" uid="uid://bm0u5y6v2dt88" path="res://Scenes/Game/Gems/Gem_Gold.tscn" id="2_7xg1r"]
 [ext_resource type="PackedScene" uid="uid://bu5vx07jckqdc" path="res://Scenes/Game/Noble.tscn" id="2_pf07s"]
 [ext_resource type="PackedScene" uid="uid://b8yovc2gr7cpa" path="res://Scenes/Game/Gems/Gem_Fire.tscn" id="3_j5tha"]
+[ext_resource type="PackedScene" uid="uid://bb5wwrqe38o7l" path="res://Scenes/Game/Player_Arrow.tscn" id="3_jp1aw"]
+[ext_resource type="Texture2D" uid="uid://dkbveafyf21l8" path="res://Assets/UI/Generic/UI_Generic_Arrow.png" id="3_obqr6"]
 [ext_resource type="PackedScene" uid="uid://w4qvsqcr2qpo" path="res://Scenes/Game/Gems/Gem_Water.tscn" id="4_gevlf"]
 [ext_resource type="PackedScene" uid="uid://wjkwtnnbnand" path="res://Scenes/Game/Gems/Gem_Grass.tscn" id="5_o3u68"]
 [ext_resource type="PackedScene" uid="uid://c1toeh2ubsefb" path="res://Scenes/Game/Gems/Gem_Electric.tscn" id="6_npr8e"]
 [ext_resource type="PackedScene" uid="uid://byp42n4avq0bw" path="res://Scenes/Game/Gems/Gem_Psychic.tscn" id="7_7chk3"]
+[ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="12_04j3n"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mtmk"]
+bg_color = Color(0.26, 0.26, 0.26, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.18, 0.18, 0.18, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tcymt"]
+bg_color = Color(0.73, 0.3504, 0.146, 1)
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.47, 0.151418, 0.0799, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3db3s"]
+bg_color = Color(0.4, 0.4, 0.4, 1)
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.18, 0.18, 0.18, 1)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [node name="Session" type="Control"]
 layout_mode = 3
@@ -20,6 +56,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+script = ExtResource("1_ep0gm")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -58,6 +95,49 @@ layout_mode = 2
 
 [node name="Player4" parent="MarginContainer/HBoxContainer/MarginContainer3/Players" instance=ExtResource("1_ki1s4")]
 layout_mode = 2
+
+[node name="MarginContainer4" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Arrows" type="VBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Player1_Arrow" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows" instance=ExtResource("3_jp1aw")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Player2_Arrow" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows"]
+unique_name_in_owner = true
+modulate = Color(1, 0.79, 0.3, 1)
+custom_minimum_size = Vector2(0, 174)
+layout_mode = 2
+texture = ExtResource("3_obqr6")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Player3_Arrow" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows"]
+unique_name_in_owner = true
+modulate = Color(1, 0.79, 0.3, 1)
+custom_minimum_size = Vector2(0, 174)
+layout_mode = 2
+texture = ExtResource("3_obqr6")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
+
+[node name="Player4_Arrow" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows"]
+unique_name_in_owner = true
+modulate = Color(1, 0.79, 0.3, 1)
+custom_minimum_size = Vector2(0, 174)
+layout_mode = 2
+texture = ExtResource("3_obqr6")
+expand_mode = 1
+stretch_mode = 5
+flip_h = true
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
@@ -157,15 +237,18 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Deck" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Deck" instance=ExtResource("1_ltllm")]
+[node name="T3" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Deck" instance=ExtResource("1_ltllm")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Deck2" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Deck" instance=ExtResource("1_ltllm")]
+[node name="T2" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Deck" instance=ExtResource("1_ltllm")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Deck3" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Deck" instance=ExtResource("1_ltllm")]
+[node name="T1" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Deck" instance=ExtResource("1_ltllm")]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -176,6 +259,7 @@ size_flags_horizontal = 3
 size_flags_stretch_ratio = 5.0
 
 [node name="Tier_3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Tiers"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -196,6 +280,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Tier_2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Tiers"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -216,6 +301,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Tier_1" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Tiers"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -234,3 +320,57 @@ size_flags_horizontal = 3
 [node name="Card4" parent="MarginContainer/HBoxContainer/MarginContainer/Board/VBoxContainer/HBoxContainer/Tiers/Tier_1" instance=ExtResource("1_ot707")]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="Buy_Control" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 0
+offset_left = 799.0
+offset_top = 623.0
+offset_right = 799.0
+offset_bottom = 623.0
+scale = Vector2(0.535292, 0.535292)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Buy_Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -84.0
+offset_top = 132.638
+offset_right = 84.0
+offset_bottom = 172.638
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+
+[node name="Buy" type="Button" parent="Buy_Control/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_04j3n")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0mtmk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tcymt")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3db3s")
+toggle_mode = true
+text = "Buy"
+
+[node name="Hold" type="Button" parent="Buy_Control/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+theme_override_colors/font_disabled_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("12_04j3n")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/disabled = SubResource("StyleBoxFlat_0mtmk")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_tcymt")
+theme_override_styles/normal = SubResource("StyleBoxFlat_3db3s")
+toggle_mode = true
+text = "Hold
+"

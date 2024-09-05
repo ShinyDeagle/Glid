@@ -1,5 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://hnci44c8shhb"]
+[gd_scene load_steps=15 format=3 uid="uid://hnci44c8shhb"]
 
+[ext_resource type="Script" path="res://Scripts/Game/GamePlayer.gd" id="1_k8am2"]
 [ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_p8yd3"]
 [ext_resource type="PackedScene" uid="uid://58h3ur5g51f8" path="res://Scenes/Game/Gems/Player_Gem_Gold.tscn" id="2_hp5cg"]
 [ext_resource type="PackedScene" uid="uid://di02hgd8jnb4e" path="res://Scenes/Game/Gems/Player_Gem_Fire.tscn" id="3_5uxs5"]
@@ -16,6 +17,7 @@
 
 [node name="Player" type="VBoxContainer"]
 size_flags_vertical = 6
+script = ExtResource("1_k8am2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -53,21 +55,27 @@ z_index = 1
 layout_mode = 2
 
 [node name="Player_Gem_Gold" parent="Gems" instance=ExtResource("2_hp5cg")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Player_Gem_Fire" parent="Gems" instance=ExtResource("3_5uxs5")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Player_Gem_Water" parent="Gems" instance=ExtResource("4_tb08r")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Player_Gem_Grass" parent="Gems" instance=ExtResource("5_b0msp")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Player_Gem_Electric" parent="Gems" instance=ExtResource("6_73w3b")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Player_Gem_Psychic" parent="Gems" instance=ExtResource("7_d4eyc")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Stash" type="HBoxContainer" parent="."]
@@ -79,16 +87,21 @@ unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Stash_Fire" parent="Stash" instance=ExtResource("10_vsnqc")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Stash_Water" parent="Stash" instance=ExtResource("13_ujvvf")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Stash_Grass" parent="Stash" instance=ExtResource("11_3gk2x")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Stash_Electric" parent="Stash" instance=ExtResource("9_upb7h")]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Stash_Psychic" parent="Stash" instance=ExtResource("12_aq5yr")]
+unique_name_in_owner = true
 layout_mode = 2

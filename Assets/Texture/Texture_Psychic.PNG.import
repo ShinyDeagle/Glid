@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bq0cublr10l0c"
-path="res://.godot/imported/Texture_Psychic.PNG-c5d40ae077831d03263ed45b41f2627c.ctex"
+path="res://.godot/imported/Texture_Psychic.png-e03295c328c1993f7861be78d00e60b6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Texture/Texture_Psychic.PNG"
-dest_files=["res://.godot/imported/Texture_Psychic.PNG-c5d40ae077831d03263ed45b41f2627c.ctex"]
+source_file="res://Assets/Texture/Texture_Psychic.png"
+dest_files=["res://.godot/imported/Texture_Psychic.png-e03295c328c1993f7861be78d00e60b6.ctex"]
 
 [params]
 

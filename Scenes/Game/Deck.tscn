@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://nh7jhv57lm1w"]
+[gd_scene load_steps=7 format=3 uid="uid://nh7jhv57lm1w"]
 
 [ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_fc2cg"]
 
@@ -24,6 +24,23 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrgoj"]
+bg_color = Color(0.93, 0.93, 0.93, 1)
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.93, 0.93, 0.93, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gtw1"]
 bg_color = Color(0.928625, 0.440598, 0, 1)
@@ -85,6 +102,7 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8g2ow")
 
 [node name="Button" type="Button" parent="Rotator/Scaler"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(96, 132)
 layout_mode = 1
 anchors_preset = 15
@@ -97,11 +115,13 @@ offset_bottom = 66.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/disabled = SubResource("StyleBoxFlat_8w0g0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_xrgoj")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8gtw1")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_se73s")
 toggle_mode = true
 
 [node name="Amount" type="Label" parent="Rotator/Scaler"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -124,6 +144,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Tier" type="Label" parent="Rotator/Scaler"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5

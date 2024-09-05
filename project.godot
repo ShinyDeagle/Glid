@@ -12,8 +12,18 @@ config_version=5
 
 config/name="Glid: Trader's Galore"
 config/tags=PackedStringArray("mine")
+run/main_scene="res://Scenes/Main.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+EventBus="*res://Scripts/Utils/EventBus.gd"
+AssetLoader="*res://Scripts/AssetLoader.gd"
+
+[debug]
+
+gdscript/warnings/unused_signal=0
 
 [display]
 
@@ -22,3 +32,7 @@ window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="keep_height"
 window/vsync/vsync_mode=0
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/ColorPreview/plugin.cfg")

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cmw84ubrt8igt"]
 
 [ext_resource type="PackedScene" uid="uid://v244k2it4o28" path="res://Scenes/Game/Player_Gem.tscn" id="1_ifki8"]
-[ext_resource type="Texture2D" uid="uid://ee3gormjje5p" path="res://Assets/Texture/Texture_Electric.PNG" id="2_odt3y"]
+[ext_resource type="Texture2D" uid="uid://ee3gormjje5p" path="res://Assets/Texture/Texture_Electric.png" id="2_odt3y"]
 
 [node name="Player_Gem_Electric" instance=ExtResource("1_ifki8")]
 

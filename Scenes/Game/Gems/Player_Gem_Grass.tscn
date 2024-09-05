@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bk7oqnm6r7mkx"]
 
 [ext_resource type="PackedScene" uid="uid://v244k2it4o28" path="res://Scenes/Game/Player_Gem.tscn" id="1_66s05"]
-[ext_resource type="Texture2D" uid="uid://3vnlg70gicb4" path="res://Assets/Texture/Texture_Grass.PNG" id="2_e5jyb"]
+[ext_resource type="Texture2D" uid="uid://3vnlg70gicb4" path="res://Assets/Texture/Texture_Grass.png" id="2_e5jyb"]
 
 [node name="Player_Gem_Grass" instance=ExtResource("1_66s05")]
 

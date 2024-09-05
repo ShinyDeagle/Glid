@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://v244k2it4o28"]
 
-[ext_resource type="Texture2D" uid="uid://qfcayoql8cs3" path="res://Assets/Texture/Texture_Fire.PNG" id="1_l1ugb"]
+[ext_resource type="Texture2D" uid="uid://qfcayoql8cs3" path="res://Assets/Texture/Texture_Fire.png" id="1_l1ugb"]
 [ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="2_vdl1x"]
 
 [node name="Gem" type="Control"]

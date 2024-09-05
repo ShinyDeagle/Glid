@@ -1,3 +1,14 @@
-[gd_scene format=3 uid="uid://bkdwwsvymom7w"]
+[gd_scene load_steps=3 format=3 uid="uid://bkdwwsvymom7w"]
+
+[ext_resource type="PackedScene" uid="uid://eyaqe0owntkc" path="res://Scenes/Game/Session.tscn" id="1_0x1my"]
+[ext_resource type="Script" path="res://Scripts/Main.gd" id="1_636uk"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_636uk")
+debug_level = 3
+
+[node name="Game" type="Node" parent="."]
+
+[node name="Session" parent="Game" instance=ExtResource("1_0x1my")]
+
+[node name="Menu" type="Node" parent="."]

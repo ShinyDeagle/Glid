@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://blahpjlpjlsi2"]
+[gd_scene load_steps=11 format=3 uid="uid://blahpjlpjlsi2"]
 
 [ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_tmn33"]
-[ext_resource type="Texture2D" uid="uid://qfcayoql8cs3" path="res://Assets/Texture/Texture_Fire.PNG" id="2_e4ybt"]
+[ext_resource type="Script" path="res://Scripts/Game/Card.gd" id="1_x1up3"]
+[ext_resource type="Texture2D" uid="uid://qfcayoql8cs3" path="res://Assets/Texture/Texture_Fire.png" id="2_e4ybt"]
 [ext_resource type="PackedScene" uid="uid://dq6wy33iddhd5" path="res://Scenes/Game/Gem_Cost.tscn" id="3_vugba"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5gim0"]
@@ -66,6 +67,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 96.0
 offset_bottom = 132.0
+script = ExtResource("1_x1up3")
 
 [node name="Rotator" type="Control" parent="."]
 layout_mode = 1
@@ -89,7 +91,7 @@ grow_vertical = 2
 
 [node name="Border" type="PanelContainer" parent="Rotator/Scaler"]
 unique_name_in_owner = true
-self_modulate = Color(0.84, 0.546, 0.546, 1)
+self_modulate = Color(1, 0.588235, 0.588235, 1)
 custom_minimum_size = Vector2(96, 132)
 layout_mode = 1
 anchors_preset = 8
@@ -107,7 +109,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_5gim0")
 
 [node name="Foreground" type="PanelContainer" parent="Rotator/Scaler/Border"]
 unique_name_in_owner = true
-self_modulate = Color(1, 0.59, 0.59, 1)
+self_modulate = Color(1, 0.588235, 0.588235, 1)
 clip_children = 2
 custom_minimum_size = Vector2(96, 132)
 layout_mode = 2
