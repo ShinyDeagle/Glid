@@ -22,7 +22,7 @@ func _next_player() -> void:
 	current_player = ordered_players[current_index]
 	
 	for arrow : TextureRect in %Arrows.get_children().duplicate():
-		var show_arrow : bool = int(arrow.name) - 1 == current_index
+		var show_arrow : bool = int(str(arrow.name)) - 1 == current_index
 		arrow.visibility_layer = 0 if not show_arrow else 1
 
 func _ready() -> void:
@@ -50,6 +50,14 @@ func _ready() -> void:
 	%Gem_Psychic.get_node("%Button").mouse_exited.connect(_hover_exit_gem)
 	%Gem_Psychic.get_node("%Button").gui_input.connect(_gem_press)
 	%Gem_Psychic.get_node("%Button").visible = true
+	
+	%Buy_Control.visible = false
+	%Buy.pressed.connect(_on_buy, CONNECT_DEFERRED)
+	%Hold.pressed.connect(_on_hold, CONNECT_DEFERRED)
+	
+	%T1.get_node("%Button").pressed.connect(_on_select_deck.bind(%T1))
+	%T2.get_node("%Button").pressed.connect(_on_select_deck.bind(%T2))
+	%T3.get_node("%Button").pressed.connect(_on_select_deck.bind(%T3))
 
 var hover_gem_type : String = ""
 func _hover_enter_gem(type: String) -> void:
@@ -95,10 +103,12 @@ func setup() -> void:
 	players.append(Player.new())
 	
 	Utils.free_children(%Players, true)
+	Utils.free_children(%Arrows, true)
 	for p : Player in players:
 		var visual : GamePlayer = AssetLoader.PLAYER.instantiate() as GamePlayer
 		var arrow : TextureRect = AssetLoader.PLAYER_ARROW.instantiate() as TextureRect
 		
+		%Arrows.add_child(arrow)
 		%Players.add_child(visual)
 		visual.setup(p)
 		visual.update.emit()
@@ -125,9 +135,9 @@ func setup() -> void:
 	t3_pool.shuffle()
 	
 	for i in range(MAX_CARDS_PER_TIER):
-		add_new_card(1)
-		add_new_card(2)
-		add_new_card(3)
+		add_new_card(1, i)
+		add_new_card(2, i)
+		add_new_card(3, i)
 	
 	_next_player()
 
@@ -142,18 +152,25 @@ func buy_card(who: Player, what: Card) -> void:
 	if not success:
 		return
 	
+	var index : int = 0
 	var data : CardData = what.data
 	if data.card_tier == 1:
+		index = %Tier_1.get_children().find(what)
 		t1_pool.erase(data)
 	elif data.card_tier == 2:
+		index = %Tier_2.get_children().find(what)
 		t2_pool.erase(data)
 	elif data.card_tier == 3:
+		index = %Tier_3.get_children().find(what)
 		t3_pool.erase(data)
 	
 	what.queue_free()
-	add_new_card(data.card_tier)
+	add_new_card(data.card_tier, index)
+	
+	%Buy_Control.visible = false
+	_on_end_turn()
 
-func add_new_card(tier: int) -> void:
+func add_new_card(tier: int, index: int) -> void:
 	var new_card : CardData = null
 	
 	if tier == 1:
@@ -171,14 +188,18 @@ func add_new_card(tier: int) -> void:
 	
 	if tier == 1:
 		%Tier_1.add_child(card)
+		%Tier_1.move_child(card, index)
 		%T1.get_node("%Amount").text = str(t1_pool.size())
 	elif tier == 2:
 		%Tier_2.add_child(card)
+		%Tier_2.move_child(card, index)
 		%T2.get_node("%Amount").text = str(t2_pool.size())
 	elif tier == 3:
 		%Tier_3.add_child(card)
+		%Tier_3.move_child(card, index)
 		%T3.get_node("%Amount").text = str(t3_pool.size())
 	
+	card.get_node("%Button").pressed.connect(_on_select_card.bind(card))
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.update()
 
@@ -206,7 +227,22 @@ func _on_add_gem(type: String) -> void:
 		return
 	
 	if gems_taken == 1:
+		var double_dip : bool = false
+		match type:
+			"Fire":
+				double_dip = fire_taking >= 1 and fire_gems <= 2 and type == first_take
+			"Water":
+				double_dip = water_taking >= 1 and water_gems <= 2 and type == first_take
+			"Grass":
+				double_dip = grass_taking >= 1 and grass_gems <= 2 and type == first_take
+			"Electric":
+				double_dip = electric_taking >= 1 and electric_gems <= 2 and type == first_take
+			"Psychic":
+				double_dip = psychic_taking >= 1 and psychic_gems <= 2 and type == first_take
+		
 		spread_take = not type == first_take
+		if not spread_take and double_dip:
+			return
 	
 	if not spread_take and gems_taken == 2:
 		return
@@ -322,6 +358,87 @@ func _on_putback_gem(type: String) -> void:
 	if gems_taken == 0:
 		first_take = ""
 
+var selected_card : Card = null
+const PLAYER_MAX_DECK_SIZE : int = 3
+func _on_select_card(card: Card) -> void:
+	if card == null:
+		return
+	
+	if selected_card != null and selected_card == card:
+		_on_deselect()
+		return
+	
+	%Buy_Control.visible = true
+	%Buy_Control.global_position = card.get_node("%Scaler").global_position
+	selected_card = card
+	
+	var data : CardData = selected_card.data
+	%Buy.disabled = not data.can_afford(current_player)
+	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE
+
+func _on_buy() -> void:
+	if not selected_card:
+		return
+	
+	var data : CardData = selected_card.data
+	if not data.can_afford(current_player):
+		return
+	
+	buy_card(current_player, selected_card)
+
+func _on_hold() -> void:
+	return
+	
+	if not selected_card and not selected_deck:
+		return
+	
+	var data : CardData = selected_card.data
+	if not data.can_afford(current_player):
+		return
+	
+	var visual : GamePlayer = player_to_visual[current_player] as GamePlayer
+	var success : bool = visual.buy_card(selected_card)
+	
+	if not success:
+		return
+	
+	_on_end_turn()
+
+var selected_deck : Control = null
+var selected_tier : int = -1
+func _on_select_deck(deck: Control) -> void:
+	selected_card = null
+	
+	if selected_deck != null and deck == selected_deck:
+		_on_deselect()
+		return
+	
+	selected_deck = deck
+	
+	%Buy_Control.global_position = deck.get_node("%Scaler").global_position
+	
+	%Buy.disabled = true
+	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE
+	
+	if deck == %T1:
+		selected_tier = 1
+	if deck == %T2:
+		selected_tier = 2
+	if deck == %T3:
+		selected_tier = 3
+	
+	
+
+func _on_deselect() -> void:
+	if selected_card != null:
+		selected_card.get_node("%Button").set_pressed_no_signal(false)
+	if selected_deck != null:
+		selected_deck.get_node("%Button").set_pressed_no_signal(false)
+	
+	%Buy_Control.visible = false
+	selected_tier = -1
+	selected_card = null
+
 func _on_end_turn() -> void:
 	%Gem_Fire.get_node("%Taking").visible = false
 	%Gem_Water.get_node("%Taking").visible = false
@@ -354,3 +471,10 @@ func _on_end_turn() -> void:
 	
 	visual.update.emit()
 	_next_player()
+
+func update_gems() -> void:
+	%Gem_Fire.get_node("%Amount").text = str(fire_gems)
+	%Gem_Water.get_node("%Amount").text = str(water_gems)
+	%Gem_Grass.get_node("%Amount").text = str(grass_gems)
+	%Gem_Electric.get_node("%Amount").text = str(electric_gems)
+	%Gem_Psychic.get_node("%Amount").text = str(psychic_gems)

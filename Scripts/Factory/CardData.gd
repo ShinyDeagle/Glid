@@ -71,10 +71,10 @@ func can_afford(who: Player) -> bool:
 		return false
 	
 	var fire_to_pay : int = max(0, card_fire_cost - who.fire_cards - who.fire_gems)
-	var water_to_pay : int = max(0, card_water_cost - who.water_cards - who.fire_gems)
-	var grass_to_pay : int = max(0, card_grass_cost - who.grass_cards - who.fire_gems)
-	var electric_to_pay : int = max(0, card_electric_cost - who.electric_cards - who.fire_gems)
-	var psychic_to_pay : int = max(0, card_psychic_cost - who.psychic_cards - who.fire_gems)
+	var water_to_pay : int = max(0, card_water_cost - who.water_cards - who.water_gems)
+	var grass_to_pay : int = max(0, card_grass_cost - who.grass_cards - who.grass_gems)
+	var electric_to_pay : int = max(0, card_electric_cost - who.electric_cards - who.electric_gems)
+	var psychic_to_pay : int = max(0, card_psychic_cost - who.psychic_cards - who.psychic_gems)
 	var leftover : int = fire_to_pay + \
 		water_to_pay + \
 		grass_to_pay + \

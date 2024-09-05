@@ -323,7 +323,6 @@ size_flags_horizontal = 3
 
 [node name="Buy_Control" type="Control" parent="."]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 0
 offset_left = 799.0
 offset_top = 623.0

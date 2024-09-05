@@ -30,6 +30,8 @@ func _update() -> void:
 	_update_stash(%Stash_Grass, player.grass_cards)
 	_update_stash(%Stash_Electric, player.electric_cards)
 	_update_stash(%Stash_Psychic, player.psychic_cards)
+	
+	_update_deck()
 
 func _update_points() -> void:
 	if not player:
@@ -48,6 +50,9 @@ func _update_stash(what: Control, amt: int) -> void:
 	label.text = str(amt)
 	
 	what.modulate = Color.WHITE.darkened(0.5) if amt <= 0 else Color.WHITE
+
+func _update_deck() -> void:
+	%Player_Deck.visibility_layer = 0
 
 func buy_card(what: Card) -> bool:
 	var data : CardData = what.data
@@ -72,13 +77,14 @@ func buy_card(what: Card) -> bool:
 	Session.inst().grass_gems += min(player.grass_gems, grass_to_pay)
 	Session.inst().electric_gems += min(player.electric_gems, electric_to_pay)
 	Session.inst().psychic_gems += min(player.psychic_gems, psychic_to_pay)
+	Session.inst().update_gems()
 	
 	player.fire_gems -= fire_to_pay
 	player.water_gems -= water_to_pay
 	player.grass_gems -= grass_to_pay
 	player.electric_gems -= electric_to_pay
 	player.psychic_gems -= psychic_to_pay
-	player.gold -= gold_cost
+	player.gold -= max(0, gold_cost)
 	
 	player.points += data.card_points
 	
@@ -101,7 +107,8 @@ func _on_card_bought(card: CardData) -> void:
 			player.psychic_cards += 1
 
 func get_gem_total() -> int:
-	return player.fire_gems \
+	return player.gold \
+		+ player.fire_gems \
 		+ player.water_gems \
 		+ player.grass_gems \
 		+ player.electric_gems \
