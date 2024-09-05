@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bm0u5y6v2dt88"]
+
+[ext_resource type="PackedScene" uid="uid://sb50ywf8m22y" path="res://Scenes/Game/Gem.tscn" id="1_nwq3c"]
+[ext_resource type="Texture2D" uid="uid://3p6lbmrav7uy" path="res://Assets/Texture/Texture_Gold.PNG" id="2_bogyu"]
+
+[node name="Gem_Gold" instance=ExtResource("1_nwq3c")]
+
+[node name="Texture" parent="MarginContainer" index="0"]
+texture = ExtResource("2_bogyu")

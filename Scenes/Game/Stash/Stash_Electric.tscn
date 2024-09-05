@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://bloxxns3rgshx"]
+
+[ext_resource type="PackedScene" uid="uid://caqd4r3psli8j" path="res://Scenes/Game/Stash.tscn" id="1_q4bpl"]
+[ext_resource type="Texture2D" uid="uid://cw4qop150nna7" path="res://Assets/Texture/Icon_Electric.png" id="2_57eal"]
+
+[node name="Stash_Electric" instance=ExtResource("1_q4bpl")]
+
+[node name="Foreground" parent="Rotator/Scaler" index="0"]
+self_modulate = Color(0.84, 0.791, 0.546, 1)
+
+[node name="Icon" parent="Rotator/Scaler/Foreground/Control" index="0"]
+texture = ExtResource("2_57eal")

@@ -1,0 +1,83 @@
+[gd_scene load_steps=4 format=3 uid="uid://dq6wy33iddhd5"]
+
+[ext_resource type="Texture2D" uid="uid://bg8vqvxhqnjtf" path="res://Assets/UI/Generic/UI_Generic_Circle.png" id="1_lpd1i"]
+[ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="2_6dt6t"]
+[ext_resource type="Texture2D" uid="uid://csjwpwbjipvp" path="res://Assets/Texture/Icon_Fire.png" id="3_a5dnv"]
+
+[node name="Graphic" type="TextureRect"]
+self_modulate = Color(0.59, 0.2183, 0.2183, 1)
+custom_minimum_size = Vector2(32, 32)
+texture = ExtResource("1_lpd1i")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Border" type="TextureRect" parent="."]
+unique_name_in_owner = true
+show_behind_parent = true
+custom_minimum_size = Vector2(38, 38)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -19.0
+offset_right = 19.0
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("1_lpd1i")
+expand_mode = 1
+
+[node name="Cost" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -19.0
+offset_top = -18.0
+offset_right = 21.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_6dt6t")
+theme_override_font_sizes/font_size = 24
+text = "7"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Icon" type="TextureRect" parent="Control"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 12.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("3_a5dnv")
+expand_mode = 1
+stretch_mode = 5

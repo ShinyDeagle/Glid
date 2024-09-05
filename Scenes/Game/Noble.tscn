@@ -1,4 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bu5vx07jckqdc"]
+[gd_scene load_steps=10 format=3 uid="uid://bu5vx07jckqdc"]
+
+[ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_61q6k"]
+[ext_resource type="PackedScene" uid="uid://bew3ff5wx01el" path="res://Scenes/Game/Stash/Stash_Fire.tscn" id="2_mouv4"]
+[ext_resource type="PackedScene" uid="uid://dtkgss3mesmkp" path="res://Scenes/Game/Stash/Stash_Grass.tscn" id="3_124nf"]
+[ext_resource type="PackedScene" uid="uid://bloxxns3rgshx" path="res://Scenes/Game/Stash/Stash_Electric.tscn" id="4_vpjae"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wmete"]
 bg_color = Color(1, 1, 1, 1)
@@ -19,6 +24,23 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qv7bu"]
+bg_color = Color(0.928625, 0.440598, 0, 1)
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.93, 0.93, 0.93, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gtw1"]
 bg_color = Color(0.928625, 0.440598, 0, 1)
 draw_center = false
@@ -31,16 +53,21 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_se73s"]
 
 [node name="Noble" type="Control"]
-custom_minimum_size = Vector2(96, 96)
+custom_minimum_size = Vector2(96, 144)
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 3
 
 [node name="Rotator" type="Control" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -51,6 +78,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Scaler" type="Control" parent="Rotator"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -60,8 +88,9 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Rotator/Scaler"]
-modulate = Color(0.54902, 0.627451, 0.843137, 1)
+[node name="Foreground" type="PanelContainer" parent="Rotator/Scaler"]
+unique_name_in_owner = true
+self_modulate = Color(0.6342, 0.546, 0.84, 1)
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 1
 anchors_preset = 8
@@ -77,8 +106,51 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_wmete")
 
+[node name="Points" type="Label" parent="Rotator/Scaler/Foreground"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 18
+theme_override_fonts/font = ExtResource("1_61q6k")
+theme_override_font_sizes/font_size = 64
+text = "3"
+
+[node name="Control" type="Control" parent="Rotator/Scaler/Foreground"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+
+[node name="Costs" type="HBoxContainer" parent="Rotator/Scaler/Foreground/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -78.0
+offset_top = -26.0
+offset_right = 78.0
+offset_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+pivot_offset = Vector2(88, 40)
+theme_override_constants/separation = -8
+
+[node name="Stash_Fire" parent="Rotator/Scaler/Foreground/Control/Costs" instance=ExtResource("2_mouv4")]
+layout_mode = 2
+
+[node name="Stash_Grass" parent="Rotator/Scaler/Foreground/Control/Costs" instance=ExtResource("3_124nf")]
+layout_mode = 2
+
+[node name="Stash_Electric" parent="Rotator/Scaler/Foreground/Control/Costs" instance=ExtResource("4_vpjae")]
+layout_mode = 2
+
 [node name="Button" type="Button" parent="Rotator/Scaler"]
-visible = false
+unique_name_in_owner = true
+show_behind_parent = true
 custom_minimum_size = Vector2(96, 96)
 layout_mode = 1
 anchors_preset = 8
@@ -93,7 +165,7 @@ offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/disabled = SubResource("StyleBoxFlat_8w0g0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_qv7bu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8gtw1")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_se73s")
 toggle_mode = true
-button_pressed = true

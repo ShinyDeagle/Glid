@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvh0dkkpy8x2f"]
+
+[ext_resource type="PackedScene" uid="uid://dq6wy33iddhd5" path="res://Scenes/Game/Gem_Cost.tscn" id="1_fv4ch"]
+[ext_resource type="Texture2D" uid="uid://clrdxp8lykiyp" path="res://Assets/Texture/Icon_Psychic.png" id="2_uqou6"]
+
+[node name="Gem_Cost_Psychic" instance=ExtResource("1_fv4ch")]
+self_modulate = Color(0.422735, 0.2183, 0.59, 1)
+
+[node name="Icon" parent="Control" index="0"]
+scale = Vector2(1.8, 1.8)
+texture = ExtResource("2_uqou6")

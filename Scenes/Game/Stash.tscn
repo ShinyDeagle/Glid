@@ -1,22 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://nh7jhv57lm1w"]
+[gd_scene load_steps=7 format=3 uid="uid://caqd4r3psli8j"]
 
-[ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_fc2cg"]
+[ext_resource type="Texture2D" uid="uid://csjwpwbjipvp" path="res://Assets/Texture/Icon_Fire.png" id="1_kcrmh"]
+[ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="2_sp2hy"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8g2ow"]
-bg_color = Color(1, 0.885667, 0.51, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0.58, 0.30102, 0.1508, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6bcmf"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.29, 0.29, 0.29, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-expand_margin_left = 4.0
-expand_margin_top = 4.0
-expand_margin_right = 4.0
-expand_margin_bottom = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8w0g0"]
 bg_color = Color(0.14, 0.14, 0.14, 0.435294)
@@ -40,12 +37,10 @@ corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_se73s"]
 
-[node name="Deck" type="Control"]
-custom_minimum_size = Vector2(96, 132)
+[node name="Stash" type="Control"]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 3
 anchors_preset = 0
-offset_right = 96.0
-offset_bottom = 132.0
 
 [node name="Rotator" type="Control" parent="."]
 layout_mode = 1
@@ -66,25 +61,52 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(0.75, 0.75)
 
-[node name="Panel" type="PanelContainer" parent="Rotator/Scaler"]
-custom_minimum_size = Vector2(96, 132)
+[node name="Foreground" type="PanelContainer" parent="Rotator/Scaler"]
+unique_name_in_owner = true
+self_modulate = Color(0.84, 0.546, 0.546, 1)
+custom_minimum_size = Vector2(48, 64)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -48.0
-offset_top = -66.0
-offset_right = 48.0
-offset_bottom = 66.0
+offset_left = -24.0
+offset_top = -32.0
+offset_right = 24.0
+offset_bottom = 32.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_8g2ow")
+theme_override_styles/panel = SubResource("StyleBoxFlat_6bcmf")
+
+[node name="Control" type="Control" parent="Rotator/Scaler/Foreground"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+
+[node name="Icon" type="TextureRect" parent="Rotator/Scaler/Foreground/Control"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(16, 16)
+texture = ExtResource("1_kcrmh")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Button" type="Button" parent="Rotator/Scaler"]
+visible = false
 custom_minimum_size = Vector2(96, 132)
 layout_mode = 1
 anchors_preset = 15
@@ -100,44 +122,26 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_8w0g0")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8gtw1")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_se73s")
 toggle_mode = true
+button_pressed = true
 
 [node name="Amount" type="Label" parent="Rotator/Scaler"]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 24
-theme_override_fonts/font = ExtResource("1_fc2cg")
-theme_override_font_sizes/font_size = 48
-text = "40"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Tier" type="Label" parent="Rotator/Scaler"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -28.0
-offset_top = 19.0
-offset_right = 28.0
-offset_bottom = 75.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 12
-theme_override_fonts/font = ExtResource("1_fc2cg")
-theme_override_font_sizes/font_size = 24
-text = "T1"
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("2_sp2hy")
+theme_override_font_sizes/font_size = 40
+text = "4"
 horizontal_alignment = 1
 vertical_alignment = 1

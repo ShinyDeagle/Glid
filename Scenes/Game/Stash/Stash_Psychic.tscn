@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cvcdwpq3udjqk"]
+
+[ext_resource type="PackedScene" uid="uid://caqd4r3psli8j" path="res://Scenes/Game/Stash.tscn" id="1_jfibu"]
+[ext_resource type="Texture2D" uid="uid://clrdxp8lykiyp" path="res://Assets/Texture/Icon_Psychic.png" id="2_rci4f"]
+
+[node name="Stash_Psychic" instance=ExtResource("1_jfibu")]
+
+[node name="Foreground" parent="Rotator/Scaler" index="0"]
+self_modulate = Color(0.51925, 0.3685, 0.67, 1)
+
+[node name="Icon" parent="Rotator/Scaler/Foreground/Control" index="0"]
+scale = Vector2(1.5, 1.5)
+pivot_offset = Vector2(24, 24)
+texture = ExtResource("2_rci4f")

@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bew3ff5wx01el"]
+
+[ext_resource type="PackedScene" uid="uid://caqd4r3psli8j" path="res://Scenes/Game/Stash.tscn" id="1_aer8u"]
+
+[node name="Stash_Fire" instance=ExtResource("1_aer8u")]

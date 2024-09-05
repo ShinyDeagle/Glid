@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://byp42n4avq0bw"]
+
+[ext_resource type="PackedScene" uid="uid://sb50ywf8m22y" path="res://Scenes/Game/Gem.tscn" id="1_mk3dr"]
+[ext_resource type="Texture2D" uid="uid://bq0cublr10l0c" path="res://Assets/Texture/Texture_Psychic.PNG" id="2_q1h30"]
+
+[node name="Gem_Psychic" instance=ExtResource("1_mk3dr")]
+
+[node name="Texture" parent="MarginContainer" index="0"]
+texture = ExtResource("2_q1h30")

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwx32p6213rm8"]
+
+[ext_resource type="PackedScene" uid="uid://dq6wy33iddhd5" path="res://Scenes/Game/Gem_Cost.tscn" id="1_i0ro3"]
+[ext_resource type="Texture2D" uid="uid://h8bbjj8riwix" path="res://Assets/Texture/Icon_Grass.png" id="2_rwc54"]
+
+[node name="Gem_Cost_Grass" instance=ExtResource("1_i0ro3")]
+self_modulate = Color(0.2183, 0.59, 0.28025, 1)
+
+[node name="Icon" parent="Control" index="0"]
+texture = ExtResource("2_rwc54")

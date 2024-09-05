@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://tiy2rygm32j4"]
+
+[ext_resource type="PackedScene" uid="uid://dq6wy33iddhd5" path="res://Scenes/Game/Gem_Cost.tscn" id="1_2xwi6"]
+[ext_resource type="Texture2D" uid="uid://kms1lui006fe" path="res://Assets/Texture/Icon_Water.png" id="2_gp6nh"]
+
+[node name="Gem_Cost_Water" instance=ExtResource("1_2xwi6")]
+self_modulate = Color(0.2183, 0.54044, 0.59, 1)
+
+[node name="Icon" parent="Control" index="0"]
+texture = ExtResource("2_gp6nh")

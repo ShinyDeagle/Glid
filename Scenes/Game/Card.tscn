@@ -1,23 +1,45 @@
-[gd_scene load_steps=5 format=3 uid="uid://blahpjlpjlsi2"]
+[gd_scene load_steps=10 format=3 uid="uid://blahpjlpjlsi2"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0q43m"]
+[ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_tmn33"]
+[ext_resource type="Texture2D" uid="uid://qfcayoql8cs3" path="res://Assets/Texture/Texture_Fire.PNG" id="2_e4ybt"]
+[ext_resource type="PackedScene" uid="uid://dq6wy33iddhd5" path="res://Scenes/Game/Gem_Cost.tscn" id="3_vugba"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5gim0"]
 bg_color = Color(1, 1, 1, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
+draw_center = false
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
 border_color = Color(0.29, 0.29, 0.29, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0q43m"]
+bg_color = Color(0.67, 0.67, 0.67, 1)
+border_color = Color(0.29, 0.29, 0.29, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8w0g0"]
 bg_color = Color(0.14, 0.14, 0.14, 0.435294)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lqml6"]
+bg_color = Color(0.93, 0.93, 0.93, 1)
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.93, 0.93, 0.93, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8gtw1"]
 bg_color = Color(0.928625, 0.440598, 0, 1)
@@ -31,6 +53,10 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_se73s"]
 
@@ -61,8 +87,9 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Panel" type="PanelContainer" parent="Rotator/Scaler"]
-modulate = Color(0.54902, 0.627451, 0.843137, 1)
+[node name="Border" type="PanelContainer" parent="Rotator/Scaler"]
+unique_name_in_owner = true
+self_modulate = Color(0.84, 0.546, 0.546, 1)
 custom_minimum_size = Vector2(96, 132)
 layout_mode = 1
 anchors_preset = 8
@@ -76,10 +103,84 @@ offset_right = 48.0
 offset_bottom = 66.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5gim0")
+
+[node name="Foreground" type="PanelContainer" parent="Rotator/Scaler/Border"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.59, 0.59, 1)
+clip_children = 2
+custom_minimum_size = Vector2(96, 132)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_0q43m")
 
+[node name="Highlight" type="ColorRect" parent="Rotator/Scaler/Border/Foreground"]
+unique_name_in_owner = true
+self_modulate = Color(1, 0.59, 0.59, 1)
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_vertical = 0
+color = Color(0.94, 0.94, 0.94, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="Rotator/Scaler/Border/Foreground/Highlight"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="Points" type="Label" parent="Rotator/Scaler/Border/Foreground/Highlight/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 14
+theme_override_fonts/font = ExtResource("1_tmn33")
+theme_override_font_sizes/font_size = 28
+text = "5"
+
+[node name="Type" type="TextureRect" parent="Rotator/Scaler/Border/Foreground/Highlight/MarginContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 8
+texture = ExtResource("2_e4ybt")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MarginContainer" type="MarginContainer" parent="Rotator/Scaler/Border/Foreground"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 8
+
+[node name="Costs" type="GridContainer" parent="Rotator/Scaler/Border/Foreground/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+columns = 2
+
+[node name="TextureRect" parent="Rotator/Scaler/Border/Foreground/MarginContainer/Costs" instance=ExtResource("3_vugba")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="TextureRect2" parent="Rotator/Scaler/Border/Foreground/MarginContainer/Costs" instance=ExtResource("3_vugba")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="TextureRect3" parent="Rotator/Scaler/Border/Foreground/MarginContainer/Costs" instance=ExtResource("3_vugba")]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="TextureRect4" parent="Rotator/Scaler/Border/Foreground/MarginContainer/Costs" instance=ExtResource("3_vugba")]
+layout_mode = 2
+size_flags_horizontal = 2
+
 [node name="Button" type="Button" parent="Rotator/Scaler"]
-visible = false
 custom_minimum_size = Vector2(96, 132)
 layout_mode = 1
 anchors_preset = 15
@@ -92,7 +193,7 @@ offset_bottom = 66.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/disabled = SubResource("StyleBoxFlat_8w0g0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_lqml6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8gtw1")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_se73s")
 toggle_mode = true
-button_pressed = true

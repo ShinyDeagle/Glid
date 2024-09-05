@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://cpodg3crbxbxx"]
+
+[ext_resource type="PackedScene" uid="uid://dq6wy33iddhd5" path="res://Scenes/Game/Gem_Cost.tscn" id="1_owi0m"]
+[ext_resource type="Texture2D" uid="uid://cw4qop150nna7" path="res://Assets/Texture/Icon_Electric.png" id="2_chnqo"]
+
+[node name="Gem_Cost_Electric" instance=ExtResource("1_owi0m")]
+self_modulate = Color(0.59, 0.44132, 0.2183, 1)
+
+[node name="Icon" parent="Control" index="0"]
+texture = ExtResource("2_chnqo")

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://58h3ur5g51f8"]
+
+[ext_resource type="PackedScene" uid="uid://v244k2it4o28" path="res://Scenes/Game/Player_Gem.tscn" id="1_bruyw"]
+[ext_resource type="Texture2D" uid="uid://3p6lbmrav7uy" path="res://Assets/Texture/Texture_Gold.PNG" id="2_4xia8"]
+
+[node name="Player_Gem_Gold" instance=ExtResource("1_bruyw")]
+
+[node name="Texture" parent="MarginContainer" index="0"]
+texture = ExtResource("2_4xia8")
