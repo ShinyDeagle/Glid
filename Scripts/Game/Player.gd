@@ -21,3 +21,6 @@ var gold : int = 0
 var points : int = 0
 
 var deck : Array[CardData] = []
+
+func get_gem_total() -> int:
+	return gold + fire_gems + water_gems + grass_gems + electric_gems + psychic_gems

@@ -238,6 +238,9 @@ var second_take : String = ""
 var gems_taken : int = 0
 const MAX_GEMS_PER_PLAYER : int = 10
 func _on_add_gem(type: String) -> void:
+	if gems_taken + current_player.get_gem_total() >= MAX_GEMS_PER_PLAYER:
+		return
+	
 	if gems_taken >= 3:
 		return
 	
@@ -391,7 +394,10 @@ func _on_select_card(card: Card, held: bool = false) -> void:
 	
 	var data : CardData = selected_card.data
 	%Buy.disabled = not data.can_afford(current_player)
-	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE or gold <= 0 or held
+	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE \
+		or gold <= 0 \
+		or held \
+		or current_player.get_gem_total() >= MAX_GEMS_PER_PLAYER
 
 func _on_buy() -> void:
 	if not selected_card:
@@ -468,7 +474,9 @@ func _on_select_deck(deck: Control) -> void:
 	%Buy_Control.global_position = deck.get_node("%Scaler").global_position
 	
 	%Buy.disabled = true
-	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE or gold <= 0
+	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE \
+		or gold <= 0 \
+		or current_player.get_gem_total() >= MAX_GEMS_PER_PLAYER
 	
 	if deck == %T1:
 		selected_tier = 1
