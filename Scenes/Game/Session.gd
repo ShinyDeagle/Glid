@@ -518,6 +518,10 @@ func _on_end_turn() -> void:
 	gems_taken = 0
 	
 	visual.update.emit()
+	
+	for p : GamePlayer in player_to_visual.values():
+		p.toggle_deck(false)
+	
 	_next_player()
 
 func update() -> void:

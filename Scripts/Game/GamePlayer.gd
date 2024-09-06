@@ -72,11 +72,11 @@ func buy_card(what: Card) -> bool:
 	var electric_to_pay : int = max(0, data.card_electric_cost - player.electric_cards)
 	var psychic_to_pay : int = max(0, data.card_psychic_cost - player.psychic_cards)
 	
-	var gold_cost : int = (fire_to_pay - player.fire_gems) + \
-		(water_to_pay - player.water_gems) + \
-		(grass_to_pay - player.grass_gems) + \
-		(electric_to_pay - player.electric_gems) + \
-		(psychic_to_pay - player.psychic_gems)
+	var gold_cost : int = (max(0, fire_to_pay - player.fire_gems)) + \
+		(max(0, water_to_pay - player.water_gems)) + \
+		(max(0, grass_to_pay - player.grass_gems)) + \
+		(max(0, electric_to_pay - player.electric_gems)) + \
+		(max(0, psychic_to_pay - player.psychic_gems))
 	
 	Session.inst().gold += gold_cost
 	Session.inst().fire_gems += min(player.fire_gems, fire_to_pay)
@@ -154,4 +154,8 @@ func toggle_deck(flag: bool) -> void:
 			visual.update()
 			
 			visual.get_node("%Button").visible = true
-			visual.get_node("%Button").pressed.connect(Session.inst()._on_select_card.bind(visual, true))
+			if Session.inst().current_player == player:
+				visual.get_node("%Button").pressed.connect(Session.inst()._on_select_card.bind(visual, true))
+	else:
+		Session.inst()._on_deselect()
+		%Player_Deck.get_node("%Button").set_pressed_no_signal(false)
