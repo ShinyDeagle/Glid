@@ -1,8 +1,11 @@
 extends Node
 
+const CARD : PackedScene = preload("res://Scenes/Game/Card.tscn")
 const PLAYER : PackedScene = preload("res://Scenes/Game/Player.tscn")
 const PLAYER_ARROW : PackedScene = preload("res://Scenes/Game/Player_Arrow.tscn")
-const CARD : PackedScene = preload("res://Scenes/Game/Card.tscn")
+
+func get_card() -> Card:
+	return CARD.instantiate() as Card
 
 const GEM : Dictionary = {
 	"Fire": preload("res://Scenes/Game/Gems/Gem_Fire.tscn"),

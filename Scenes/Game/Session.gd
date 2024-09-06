@@ -140,6 +140,7 @@ func setup() -> void:
 		add_new_card(3, i)
 	
 	_next_player()
+	update()
 
 static var t1_pool : Array[CardData] = []
 static var t2_pool : Array[CardData] = []
@@ -152,23 +153,39 @@ func buy_card(who: Player, what: Card) -> void:
 	if not success:
 		return
 	
-	var index : int = 0
 	var data : CardData = what.data
-	if data.card_tier == 1:
-		index = %Tier_1.get_children().find(what)
-		t1_pool.erase(data)
-	elif data.card_tier == 2:
-		index = %Tier_2.get_children().find(what)
-		t2_pool.erase(data)
-	elif data.card_tier == 3:
-		index = %Tier_3.get_children().find(what)
-		t3_pool.erase(data)
+	current_player.deck.erase(data)
+	
+	var index : int = get_child_index(what)
+	if not held_card:
+		erase_from_pool(what)
 	
 	what.queue_free()
-	add_new_card(data.card_tier, index)
+	if not held_card:
+		add_new_card(data.card_tier, index)
 	
 	%Buy_Control.visible = false
 	_on_end_turn()
+
+func erase_from_pool(card: Card) -> void:
+	var data : CardData = card.data
+	if data.card_tier == 1:
+		t1_pool.erase(data)
+	elif data.card_tier == 2:
+		t2_pool.erase(data)
+	elif data.card_tier == 3:
+		t3_pool.erase(data)
+
+func get_child_index(card: Card) -> int:
+	var data : CardData = card.data
+	var index : int = -1
+	if data.card_tier == 1:
+		index = %Tier_1.get_children().find(card)
+	elif data.card_tier == 2:
+		index = %Tier_2.get_children().find(card)
+	elif data.card_tier == 3:
+		index = %Tier_3.get_children().find(card)
+	return index
 
 func add_new_card(tier: int, index: int) -> void:
 	var new_card : CardData = null
@@ -203,20 +220,18 @@ func add_new_card(tier: int, index: int) -> void:
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.update()
 
+var gold : int = 5
 var fire_taking : int = 0
 var fire_gems : int = 4
-
 var water_taking : int = 0
 var water_gems : int = 4
-
 var grass_taking : int = 0
 var grass_gems : int = 4
-
 var electric_taking : int = 0
 var electric_gems : int = 4
-
 var psychic_taking : int = 0
 var psychic_gems : int = 4
+
 var spread_take : bool = false
 var first_take : String = ""
 var second_take : String = ""
@@ -359,8 +374,9 @@ func _on_putback_gem(type: String) -> void:
 		first_take = ""
 
 var selected_card : Card = null
+var held_card : bool = false
 const PLAYER_MAX_DECK_SIZE : int = 3
-func _on_select_card(card: Card) -> void:
+func _on_select_card(card: Card, held: bool = false) -> void:
 	if card == null:
 		return
 	
@@ -368,13 +384,14 @@ func _on_select_card(card: Card) -> void:
 		_on_deselect()
 		return
 	
+	held_card = held
 	%Buy_Control.visible = true
 	%Buy_Control.global_position = card.get_node("%Scaler").global_position
 	selected_card = card
 	
 	var data : CardData = selected_card.data
 	%Buy.disabled = not data.can_afford(current_player)
-	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE
+	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE or gold <= 0 or held
 
 func _on_buy() -> void:
 	if not selected_card:
@@ -387,22 +404,55 @@ func _on_buy() -> void:
 	buy_card(current_player, selected_card)
 
 func _on_hold() -> void:
-	return
-	
 	if not selected_card and not selected_deck:
 		return
 	
-	var data : CardData = selected_card.data
-	if not data.can_afford(current_player):
+	if gold <= 0:
 		return
 	
-	var visual : GamePlayer = player_to_visual[current_player] as GamePlayer
-	var success : bool = visual.buy_card(selected_card)
-	
-	if not success:
+	if selected_card != null:
+		var data : CardData = selected_card.data
+		
+		var visual : GamePlayer = player_to_visual[current_player] as GamePlayer
+		var success : bool = visual.hold_card(selected_card)
+		
+		if not success:
+			return
+		
+		var index : int = get_child_index(selected_card)
+		erase_from_pool(selected_card)
+		
+		selected_card.queue_free()
+		add_new_card(data.card_tier, index)
+		update()
+		
+		_on_deselect()
+		_on_end_turn()
+	elif selected_deck != null and selected_tier != -1:
+		var pool : Array[CardData] = []
+		match selected_tier:
+			1:
+				pool = t1_pool
+			2:
+				pool = t2_pool
+			3:
+				pool = t3_pool
+		
+		if pool.is_empty():
+			return
+		
+		if current_player.deck.size() >= PLAYER_MAX_DECK_SIZE:
+			return
+		
+		var card : CardData = pool.pop_front()
+		var visual : GamePlayer = player_to_visual[current_player] as GamePlayer
+		visual.hold_card_from_deck(card)
+		
+		update()
+		
+		_on_deselect()
+		_on_end_turn()
 		return
-	
-	_on_end_turn()
 
 var selected_deck : Control = null
 var selected_tier : int = -1
@@ -418,7 +468,7 @@ func _on_select_deck(deck: Control) -> void:
 	%Buy_Control.global_position = deck.get_node("%Scaler").global_position
 	
 	%Buy.disabled = true
-	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE
+	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE or gold <= 0
 	
 	if deck == %T1:
 		selected_tier = 1
@@ -426,8 +476,6 @@ func _on_select_deck(deck: Control) -> void:
 		selected_tier = 2
 	if deck == %T3:
 		selected_tier = 3
-	
-	
 
 func _on_deselect() -> void:
 	if selected_card != null:
@@ -472,9 +520,14 @@ func _on_end_turn() -> void:
 	visual.update.emit()
 	_next_player()
 
-func update_gems() -> void:
+func update() -> void:
+	%Gem_Gold.get_node("%Amount").text = str(gold)
 	%Gem_Fire.get_node("%Amount").text = str(fire_gems)
 	%Gem_Water.get_node("%Amount").text = str(water_gems)
 	%Gem_Grass.get_node("%Amount").text = str(grass_gems)
 	%Gem_Electric.get_node("%Amount").text = str(electric_gems)
 	%Gem_Psychic.get_node("%Amount").text = str(psychic_gems)
+	
+	%T1.get_node("%Amount").text = str(t1_pool.size())
+	%T2.get_node("%Amount").text = str(t2_pool.size())
+	%T3.get_node("%Amount").text = str(t3_pool.size())

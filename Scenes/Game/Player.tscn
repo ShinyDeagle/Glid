@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://hnci44c8shhb"]
+[gd_scene load_steps=17 format=3 uid="uid://hnci44c8shhb"]
 
 [ext_resource type="Script" path="res://Scripts/Game/GamePlayer.gd" id="1_k8am2"]
 [ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_p8yd3"]
@@ -14,15 +14,40 @@
 [ext_resource type="PackedScene" uid="uid://dtkgss3mesmkp" path="res://Scenes/Game/Stash/Stash_Grass.tscn" id="11_3gk2x"]
 [ext_resource type="PackedScene" uid="uid://cvcdwpq3udjqk" path="res://Scenes/Game/Stash/Stash_Psychic.tscn" id="12_aq5yr"]
 [ext_resource type="PackedScene" uid="uid://drq64w8k38at8" path="res://Scenes/Game/Stash/Stash_Water.tscn" id="13_ujvvf"]
+[ext_resource type="PackedScene" uid="uid://blahpjlpjlsi2" path="res://Scenes/Game/Card.tscn" id="15_ncqjf"]
 
-[node name="Player" type="VBoxContainer"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nnawf"]
+bg_color = Color(1, 0.886275, 0.509804, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.568627, 0.333333, 0.164706, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+
+[node name="Control" type="Control"]
+custom_minimum_size = Vector2(404, 174)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 404.0
 size_flags_vertical = 6
 script = ExtResource("1_k8am2")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Player" type="VBoxContainer" parent="."]
+layout_mode = 0
+size_flags_vertical = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Player"]
 layout_mode = 2
 
-[node name="Points" type="Label" parent="HBoxContainer"]
+[node name="Points" type="Label" parent="Player/HBoxContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(48, 0)
 layout_mode = 2
@@ -37,7 +62,7 @@ text = "21
 "
 horizontal_alignment = 2
 
-[node name="Name" type="Label" parent="HBoxContainer"]
+[node name="Name" type="Label" parent="Player/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -49,59 +74,103 @@ theme_override_font_sizes/font_size = 24
 text = "Player Name"
 horizontal_alignment = 2
 
-[node name="Gems" type="HBoxContainer" parent="."]
+[node name="Gems" type="HBoxContainer" parent="Player"]
 unique_name_in_owner = true
 z_index = 1
 layout_mode = 2
 
-[node name="Player_Gem_Gold" parent="Gems" instance=ExtResource("2_hp5cg")]
+[node name="Player_Gem_Gold" parent="Player/Gems" instance=ExtResource("2_hp5cg")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Player_Gem_Fire" parent="Gems" instance=ExtResource("3_5uxs5")]
+[node name="Player_Gem_Fire" parent="Player/Gems" instance=ExtResource("3_5uxs5")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Player_Gem_Water" parent="Gems" instance=ExtResource("4_tb08r")]
+[node name="Player_Gem_Water" parent="Player/Gems" instance=ExtResource("4_tb08r")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Player_Gem_Grass" parent="Gems" instance=ExtResource("5_b0msp")]
+[node name="Player_Gem_Grass" parent="Player/Gems" instance=ExtResource("5_b0msp")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Player_Gem_Electric" parent="Gems" instance=ExtResource("6_73w3b")]
+[node name="Player_Gem_Electric" parent="Player/Gems" instance=ExtResource("6_73w3b")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Player_Gem_Psychic" parent="Gems" instance=ExtResource("7_d4eyc")]
+[node name="Player_Gem_Psychic" parent="Player/Gems" instance=ExtResource("7_d4eyc")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Stash" type="HBoxContainer" parent="."]
+[node name="Stash" type="HBoxContainer" parent="Player"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Player_Deck" parent="Stash" instance=ExtResource("3_evk3f")]
+[node name="Player_Deck" parent="Player/Stash" instance=ExtResource("3_evk3f")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Stash_Fire" parent="Stash" instance=ExtResource("10_vsnqc")]
+[node name="Stash_Fire" parent="Player/Stash" instance=ExtResource("10_vsnqc")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Stash_Water" parent="Stash" instance=ExtResource("13_ujvvf")]
+[node name="Stash_Water" parent="Player/Stash" instance=ExtResource("13_ujvvf")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Stash_Grass" parent="Stash" instance=ExtResource("11_3gk2x")]
+[node name="Stash_Grass" parent="Player/Stash" instance=ExtResource("11_3gk2x")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Stash_Electric" parent="Stash" instance=ExtResource("9_upb7h")]
+[node name="Stash_Electric" parent="Player/Stash" instance=ExtResource("9_upb7h")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Stash_Psychic" parent="Stash" instance=ExtResource("12_aq5yr")]
+[node name="Stash_Psychic" parent="Player/Stash" instance=ExtResource("12_aq5yr")]
 unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Deck_Control" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 2
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(0.5, 0.5)
+
+[node name="PanelContainer" type="PanelContainer" parent="Deck_Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -70.0
+offset_right = 52.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nnawf")
+
+[node name="Deck" type="HBoxContainer" parent="Deck_Control/PanelContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 24
+
+[node name="Card" parent="Deck_Control/PanelContainer/Deck" instance=ExtResource("15_ncqjf")]
+layout_mode = 2
+
+[node name="Card2" parent="Deck_Control/PanelContainer/Deck" instance=ExtResource("15_ncqjf")]
+layout_mode = 2
+
+[node name="Card3" parent="Deck_Control/PanelContainer/Deck" instance=ExtResource("15_ncqjf")]
 layout_mode = 2
