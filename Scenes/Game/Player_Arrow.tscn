@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dkbveafyf21l8" path="res://Assets/UI/Generic/UI_Generic_Arrow.png" id="1_lorm0"]
 
-[node name="Player1_Arrow" type="TextureRect"]
+[node name="Arrow" type="TextureRect"]
 modulate = Color(1, 0.79, 0.3, 1)
 custom_minimum_size = Vector2(0, 174)
 size_flags_horizontal = 3

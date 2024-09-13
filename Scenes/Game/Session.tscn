@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://eyaqe0owntkc"]
+[gd_scene load_steps=20 format=3 uid="uid://eyaqe0owntkc"]
 
 [ext_resource type="Script" path="res://Scenes/Game/Session.gd" id="1_ep0gm"]
 [ext_resource type="PackedScene" uid="uid://hnci44c8shhb" path="res://Scenes/Game/Player.tscn" id="1_ki1s4"]
@@ -8,12 +8,24 @@
 [ext_resource type="PackedScene" uid="uid://bu5vx07jckqdc" path="res://Scenes/Game/Noble.tscn" id="2_pf07s"]
 [ext_resource type="PackedScene" uid="uid://b8yovc2gr7cpa" path="res://Scenes/Game/Gems/Gem_Fire.tscn" id="3_j5tha"]
 [ext_resource type="PackedScene" uid="uid://bb5wwrqe38o7l" path="res://Scenes/Game/Player_Arrow.tscn" id="3_jp1aw"]
-[ext_resource type="Texture2D" uid="uid://dkbveafyf21l8" path="res://Assets/UI/Generic/UI_Generic_Arrow.png" id="3_obqr6"]
 [ext_resource type="PackedScene" uid="uid://w4qvsqcr2qpo" path="res://Scenes/Game/Gems/Gem_Water.tscn" id="4_gevlf"]
 [ext_resource type="PackedScene" uid="uid://wjkwtnnbnand" path="res://Scenes/Game/Gems/Gem_Grass.tscn" id="5_o3u68"]
 [ext_resource type="PackedScene" uid="uid://c1toeh2ubsefb" path="res://Scenes/Game/Gems/Gem_Electric.tscn" id="6_npr8e"]
 [ext_resource type="PackedScene" uid="uid://byp42n4avq0bw" path="res://Scenes/Game/Gems/Gem_Psychic.tscn" id="7_7chk3"]
 [ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="12_04j3n"]
+
+[sub_resource type="Gradient" id="Gradient_rkq1a"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.44335, 1)
+colors = PackedColorArray(0.0731, 0.43, 0.406207, 1, 0.1995, 0.57, 0.5453, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h3nf6"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_4nfoq"]
+seamless = true
+color_ramp = SubResource("Gradient_rkq1a")
+noise = SubResource("FastNoiseLite_h3nf6")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mtmk"]
 bg_color = Color(0.26, 0.26, 0.26, 1)
@@ -57,6 +69,16 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_ep0gm")
+
+[node name="BG" type="TextureRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("NoiseTexture2D_4nfoq")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -111,35 +133,17 @@ theme_override_constants/separation = 0
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Player2_Arrow" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows"]
+[node name="Player2_Arrow" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows" instance=ExtResource("3_jp1aw")]
 unique_name_in_owner = true
-modulate = Color(1, 0.79, 0.3, 1)
-custom_minimum_size = Vector2(0, 174)
 layout_mode = 2
-texture = ExtResource("3_obqr6")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
 
-[node name="Player3_Arrow" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows"]
+[node name="Player3_Arrow" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows" instance=ExtResource("3_jp1aw")]
 unique_name_in_owner = true
-modulate = Color(1, 0.79, 0.3, 1)
-custom_minimum_size = Vector2(0, 174)
 layout_mode = 2
-texture = ExtResource("3_obqr6")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
 
-[node name="Player4_Arrow" type="TextureRect" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows"]
+[node name="Player4_Arrow" parent="MarginContainer/HBoxContainer/MarginContainer4/Arrows" instance=ExtResource("3_jp1aw")]
 unique_name_in_owner = true
-modulate = Color(1, 0.79, 0.3, 1)
-custom_minimum_size = Vector2(0, 174)
 layout_mode = 2
-texture = ExtResource("3_obqr6")
-expand_mode = 1
-stretch_mode = 5
-flip_h = true
 
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
