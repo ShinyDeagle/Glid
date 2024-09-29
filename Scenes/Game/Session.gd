@@ -21,9 +21,11 @@ func _next_player() -> void:
 	
 	current_player = ordered_players[current_index]
 	
+	var index : int = 0
 	for arrow : TextureRect in %Arrows.get_children().duplicate():
-		var show_arrow : bool = int(str(arrow.name)) - 1 == current_index
+		var show_arrow : bool = index == current_index
 		arrow.visibility_layer = 0 if not show_arrow else 1
+		index += 1
 
 func _ready() -> void:
 	%Gem_Fire.get_node("%Button").mouse_entered.connect(_hover_enter_gem.bind("Fire"))
@@ -91,6 +93,7 @@ func _unhandled_input(event: InputEvent) -> void:
 			_on_end_turn()
 
 const MAX_CARDS_PER_TIER : int = 4
+const NOBLES_PER_GAME : int = 3
 func setup() -> void:
 	Utils.free_children(%Nobles, true)
 	Utils.free_children(%Tier_1, true)
@@ -139,6 +142,20 @@ func setup() -> void:
 		add_new_card(2, i)
 		add_new_card(3, i)
 	
+	var nobles : Array[NobleData] = NobleData.all_nobles.duplicate()
+	nobles.shuffle()
+	
+	nobles = nobles.slice(0, NOBLES_PER_GAME)
+	
+	for noble_data : NobleData in nobles:
+		var noble : Noble = AssetLoader.get_noble()
+		%Nobles.add_child(noble)
+		
+		noble.setup(noble_data)
+		noble.update()
+		noble.get_node("%Button").pressed.connect(_on_select_noble.bind(noble))
+		noble.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	
 	_next_player()
 	update()
 
@@ -165,6 +182,17 @@ func buy_card(who: Player, what: Card) -> void:
 		add_new_card(data.card_tier, index)
 	
 	%Buy_Control.visible = false
+	_on_end_turn()
+
+func buy_noble(who: Player, what: Noble) -> void:
+	var success : bool = what.data.can_afford(who)
+	if not success:
+		return
+	
+	who.points += what.data.noble_points
+	what.modulate = Color.WHITE.darkened(0.6)
+	what.get_node("%Button").visible = false
+	
 	_on_end_turn()
 
 func erase_from_pool(card: Card) -> void:
@@ -233,9 +261,9 @@ var psychic_taking : int = 0
 var psychic_gems : int = 4
 
 var spread_take : bool = false
-var first_take : String = ""
-var second_take : String = ""
+var takes : Array[String] = []
 var gems_taken : int = 0
+var bad_dip : bool = false
 const MAX_GEMS_PER_PLAYER : int = 10
 func _on_add_gem(type: String) -> void:
 	if gems_taken + current_player.get_gem_total() >= MAX_GEMS_PER_PLAYER:
@@ -244,28 +272,32 @@ func _on_add_gem(type: String) -> void:
 	if gems_taken >= 3:
 		return
 	
-	if gems_taken == 1:
-		var double_dip : bool = false
-		match type:
-			"Fire":
-				double_dip = fire_taking >= 1 and fire_gems <= 2 and type == first_take
-			"Water":
-				double_dip = water_taking >= 1 and water_gems <= 2 and type == first_take
-			"Grass":
-				double_dip = grass_taking >= 1 and grass_gems <= 2 and type == first_take
-			"Electric":
-				double_dip = electric_taking >= 1 and electric_gems <= 2 and type == first_take
-			"Psychic":
-				double_dip = psychic_taking >= 1 and psychic_gems <= 2 and type == first_take
-		
-		spread_take = not type == first_take
-		if not spread_take and double_dip:
-			return
+	match type:
+		"Fire":
+			bad_dip = fire_taking >= 1 and fire_gems <= 2 and takes.count(type) == 1
+		"Water":
+			bad_dip = water_taking >= 1 and water_gems <= 2 and takes.count(type) == 1
+		"Grass":
+			bad_dip = grass_taking >= 1 and grass_gems <= 2 and takes.count(type) == 1
+		"Electric":
+			bad_dip = electric_taking >= 1 and electric_gems <= 2 and takes.count(type) == 1
+		"Psychic":
+			bad_dip = psychic_taking >= 1 and psychic_gems <= 2 and takes.count(type) == 1
+	
+	spread_take = not takes.any(func(take: String):
+		return takes.count(take) > 1)
+	
+	if not spread_take or bad_dip:
+		return
+	
+	if gems_taken == 2 and takes.any(func(take: String):
+		return takes.count(take) > 1):
+		return
 	
 	if not spread_take and gems_taken == 2:
 		return
 	elif spread_take and gems_taken == 2:
-		if type == first_take or type == second_take:
+		if takes.count(type) > 0:
 			return
 	
 	match type:
@@ -273,6 +305,7 @@ func _on_add_gem(type: String) -> void:
 			if fire_gems <= 0:
 				return
 			
+			takes.append("Fire")
 			fire_taking += 1
 			fire_gems -= 1
 			%Gem_Fire.get_node("%Amount").text = str(fire_gems)
@@ -282,6 +315,7 @@ func _on_add_gem(type: String) -> void:
 			if water_gems <= 0:
 				return
 			
+			takes.append("Water")
 			water_taking += 1
 			water_gems -= 1
 			%Gem_Water.get_node("%Amount").text = str(water_gems)
@@ -291,6 +325,7 @@ func _on_add_gem(type: String) -> void:
 			if grass_gems <= 0:
 				return
 			
+			takes.append("Grass")
 			grass_taking += 1
 			grass_gems -= 1
 			%Gem_Grass.get_node("%Amount").text = str(grass_gems)
@@ -300,6 +335,7 @@ func _on_add_gem(type: String) -> void:
 			if electric_gems <= 0:
 				return
 			
+			takes.append("Electric")
 			electric_taking += 1
 			electric_gems -= 1
 			%Gem_Electric.get_node("%Amount").text = str(electric_gems)
@@ -309,16 +345,12 @@ func _on_add_gem(type: String) -> void:
 			if psychic_gems <= 0:
 				return
 			
+			takes.append("Psychic")
 			psychic_taking += 1
 			psychic_gems -= 1
 			%Gem_Psychic.get_node("%Amount").text = str(psychic_gems)
 			%Gem_Psychic.get_node("%Taking").text = "+" + str(psychic_taking)
 			%Gem_Psychic.get_node("%Taking").visible = psychic_taking > 0
-	
-	if gems_taken == 0:
-		first_take = type
-	if gems_taken == 1:
-		second_take = type
 	
 	gems_taken += 1
 
@@ -327,6 +359,8 @@ func _on_putback_gem(type: String) -> void:
 		"Fire":
 			if fire_taking <= 0:
 				return
+			
+			takes.erase("Fire")
 			
 			fire_taking -= 1
 			fire_gems += 1
@@ -337,6 +371,8 @@ func _on_putback_gem(type: String) -> void:
 			if water_taking <= 0:
 				return
 			
+			takes.erase("Water")
+			
 			water_taking -= 1
 			water_gems += 1
 			%Gem_Water.get_node("%Amount").text = str(water_gems)
@@ -345,6 +381,8 @@ func _on_putback_gem(type: String) -> void:
 		"Grass":
 			if grass_taking <= 0:
 				return
+			
+			takes.erase("Grass")
 			
 			grass_taking -= 1
 			grass_gems += 1
@@ -355,6 +393,8 @@ func _on_putback_gem(type: String) -> void:
 			if electric_taking <= 0:
 				return
 			
+			takes.erase("Electric")
+			
 			electric_taking -= 1
 			electric_gems += 1
 			%Gem_Electric.get_node("%Amount").text = str(electric_gems)
@@ -364,6 +404,8 @@ func _on_putback_gem(type: String) -> void:
 			if psychic_taking <= 0:
 				return
 			
+			takes.erase("Psychic")
+			
 			psychic_taking -= 1
 			psychic_gems += 1
 			%Gem_Psychic.get_node("%Amount").text = str(psychic_gems)
@@ -371,10 +413,6 @@ func _on_putback_gem(type: String) -> void:
 			%Gem_Psychic.get_node("%Taking").visible = psychic_taking > 0
 	
 	gems_taken -= 1
-	if gems_taken == 1:
-		second_take = ""
-	if gems_taken == 0:
-		first_take = ""
 
 var selected_card : Card = null
 var held_card : bool = false
@@ -386,6 +424,11 @@ func _on_select_card(card: Card, held: bool = false) -> void:
 	if selected_card != null and selected_card == card:
 		_on_deselect()
 		return
+	
+	if selected_card != null:
+		selected_card.get_node("%Button").set_pressed_no_signal(false)
+	if selected_noble != null:
+		selected_noble.get_node("%Button").set_pressed_no_signal(false)
 	
 	held_card = held
 	%Buy_Control.visible = true
@@ -399,6 +442,28 @@ func _on_select_card(card: Card, held: bool = false) -> void:
 		or held \
 		or current_player.get_gem_total() >= MAX_GEMS_PER_PLAYER
 
+var selected_noble : Noble = null
+func _on_select_noble(noble: Noble) -> void:
+	if noble == null:
+		return
+	
+	if selected_noble != null and selected_noble == noble:
+		_on_deselect()
+		return
+	
+	if selected_card != null:
+		selected_card.get_node("%Button").set_pressed_no_signal(false)
+	if selected_noble != null:
+		selected_noble.get_node("%Button").set_pressed_no_signal(false)
+	
+	%Buy_Control.visible = true
+	%Buy_Control.global_position = noble.get_node("%Scaler").global_position
+	selected_noble = noble
+	
+	var data : NobleData = selected_noble.data
+	%Buy.disabled = not data.can_afford(current_player)
+	%Hold.disabled = true
+
 func _on_buy() -> void:
 	if not selected_card:
 		return
@@ -408,6 +473,16 @@ func _on_buy() -> void:
 		return
 	
 	buy_card(current_player, selected_card)
+
+func _on_sell() -> void:
+	if not selected_card:
+		return
+	
+	var data : NobleData = selected_noble.data
+	if not data.can_afford(current_player):
+		return
+	
+	buy_noble(current_player, selected_noble)
 
 func _on_hold() -> void:
 	if not selected_card and not selected_deck:
@@ -520,9 +595,9 @@ func _on_end_turn() -> void:
 	electric_taking = 0
 	psychic_taking = 0
 	
-	first_take = ""
-	second_take = ""
 	spread_take = false
+	bad_dip = false
+	takes.clear()
 	gems_taken = 0
 	
 	visual.update.emit()

@@ -27,6 +27,7 @@ func _ready() -> void:
 	await get_tree().create_timer(1.0, false).timeout
 	
 	CardData.load_database()
+	NobleData.load_database()
 	
 	print()
 	EventBus.on_game_load.emit()

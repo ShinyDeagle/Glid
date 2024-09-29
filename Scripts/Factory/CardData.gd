@@ -11,14 +11,12 @@ var card_electric_cost : int = 0
 var card_psychic_cost : int = 0
 var card_points : int = 0
 
-var card_data : Array[String] = []
-
-const ROUTINE_DATABASE_PATH : String = "res://Data/Database_Player.tsv"
+const CARD_DATABASE_PATH : String = "res://Data/Database_Player.tsv"
 static var all_cards : Array[CardData] = []
 static var card_map : Dictionary = {}
 static var keys : Array[String] = []
 static func load_database() -> void:
-	var database_dir : FileAccess = FileAccess.open(ROUTINE_DATABASE_PATH, FileAccess.READ)
+	var database_dir : FileAccess = FileAccess.open(CARD_DATABASE_PATH, FileAccess.READ)
 	if not database_dir:
 		Main.inst().debug("Card Loader", "DATABASE DOES NOT EXIST", Main.DEBUG_LEVEL.ERROR)
 		assert(false)

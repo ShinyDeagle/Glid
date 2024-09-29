@@ -1,12 +1,12 @@
-Level	Color	White	Blue	Green	Red	Black	Points	Total Cost
-Noble	-	3	3			3	3	9
-Noble	-		3	3	3		3	9
-Noble	-	3			3	3	3	9
-Noble	-			4	4		3	8
-Noble	-		4	4			3	8
-Noble	-				4	4	3	8
-Noble	-	4				4	3	8
+Level	Color	Fire	Water	Grass	Electric	Psychic	Points	Total Cost
+Noble	-		3		3	3	3	9
 Noble	-	3	3	3			3	9
-Noble	-			3	3	3	3	9
-Noble	-	4	4				3	8
+Noble	-	3			3	3	3	9
+Noble	-	4		4			3	8
+Noble	-		4	4			3	8
+Noble	-	4				4	3	8
+Noble	-				4	4	3	8
+Noble	-		3	3	3		3	9
+Noble	-	3		3		3	3	9
+Noble	-		4		4		3	8
 Balance		17	17	17	17	17	30	85

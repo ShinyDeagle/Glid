@@ -1,5 +1,6 @@
-[gd_scene load_steps=10 format=3 uid="uid://bu5vx07jckqdc"]
+[gd_scene load_steps=11 format=3 uid="uid://bu5vx07jckqdc"]
 
+[ext_resource type="Script" path="res://Scripts/Game/Noble.gd" id="1_4rfwa"]
 [ext_resource type="FontFile" uid="uid://ck4gjxb2nutq2" path="res://Assets/Fonts/Thiccboi/THICCCBOI-ThicccAF.ttf" id="1_61q6k"]
 [ext_resource type="PackedScene" uid="uid://bew3ff5wx01el" path="res://Scenes/Game/Stash/Stash_Fire.tscn" id="2_mouv4"]
 [ext_resource type="PackedScene" uid="uid://dtkgss3mesmkp" path="res://Scenes/Game/Stash/Stash_Grass.tscn" id="3_124nf"]
@@ -65,6 +66,7 @@ custom_minimum_size = Vector2(96, 144)
 layout_mode = 3
 anchors_preset = 0
 size_flags_horizontal = 3
+script = ExtResource("1_4rfwa")
 
 [node name="Rotator" type="Control" parent="."]
 unique_name_in_owner = true
@@ -164,6 +166,7 @@ offset_right = 48.0
 offset_bottom = 48.0
 grow_horizontal = 2
 grow_vertical = 2
+focus_mode = 0
 theme_override_styles/disabled = SubResource("StyleBoxFlat_8w0g0")
 theme_override_styles/hover = SubResource("StyleBoxFlat_qv7bu")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8gtw1")
