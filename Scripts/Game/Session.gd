@@ -26,6 +26,12 @@ func _next_player() -> void:
 		var show_arrow : bool = index == current_index
 		arrow.visibility_layer = 0 if not show_arrow else 1
 		index += 1
+	
+	for card : Card in %Tier_1.get_children() + %Tier_2.get_children() + %Tier_3.get_children():
+		card.refresh_modulation()
+	
+	for noble : Noble in %Nobles.get_children():
+		noble.refresh_modulation()
 
 func _ready() -> void:
 	%Gem_Fire.get_node("%Button").mouse_entered.connect(_hover_enter_gem.bind("Fire"))
@@ -95,6 +101,16 @@ func _unhandled_input(event: InputEvent) -> void:
 const MAX_CARDS_PER_TIER : int = 4
 const NOBLES_PER_GAME : int = 3
 func setup() -> void:
+	bank = GemBank.new()
+	bank.fire_gems = 4
+	bank.water_gems = 4
+	bank.grass_gems = 4
+	bank.electric_gems = 4
+	bank.psychic_gems = 4
+	bank.gold = 5
+	
+	taking = GemBank.new()
+	
 	Utils.free_children(%Nobles, true)
 	Utils.free_children(%Tier_1, true)
 	Utils.free_children(%Tier_2, true)
@@ -248,17 +264,8 @@ func add_new_card(tier: int, index: int) -> void:
 	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	card.update()
 
-var gold : int = 5
-var fire_taking : int = 0
-var fire_gems : int = 4
-var water_taking : int = 0
-var water_gems : int = 4
-var grass_taking : int = 0
-var grass_gems : int = 4
-var electric_taking : int = 0
-var electric_gems : int = 4
-var psychic_taking : int = 0
-var psychic_gems : int = 4
+static var bank : GemBank = null
+static var taking : GemBank = null
 
 var spread_take : bool = false
 var takes : Array[String] = []
@@ -274,15 +281,15 @@ func _on_add_gem(type: String) -> void:
 	
 	match type:
 		"Fire":
-			bad_dip = fire_taking >= 1 and fire_gems <= 2 and takes.count(type) == 1
+			bad_dip = taking.fire_gems >= 1 and bank.fire_gems <= 2 and takes.count(type) == 1
 		"Water":
-			bad_dip = water_taking >= 1 and water_gems <= 2 and takes.count(type) == 1
+			bad_dip = taking.water_gems >= 1 and bank.water_gems <= 2 and takes.count(type) == 1
 		"Grass":
-			bad_dip = grass_taking >= 1 and grass_gems <= 2 and takes.count(type) == 1
+			bad_dip = taking.grass_gems >= 1 and bank.grass_gems <= 2 and takes.count(type) == 1
 		"Electric":
-			bad_dip = electric_taking >= 1 and electric_gems <= 2 and takes.count(type) == 1
+			bad_dip = taking.electric_gems >= 1 and bank.electric_gems <= 2 and takes.count(type) == 1
 		"Psychic":
-			bad_dip = psychic_taking >= 1 and psychic_gems <= 2 and takes.count(type) == 1
+			bad_dip = taking.psychic_gems >= 1 and bank.psychic_gems <= 2 and takes.count(type) == 1
 	
 	spread_take = not takes.any(func(take: String):
 		return takes.count(take) > 1)
@@ -300,117 +307,41 @@ func _on_add_gem(type: String) -> void:
 		if takes.count(type) > 0:
 			return
 	
-	match type:
-		"Fire":
-			if fire_gems <= 0:
-				return
-			
-			takes.append("Fire")
-			fire_taking += 1
-			fire_gems -= 1
-			%Gem_Fire.get_node("%Amount").text = str(fire_gems)
-			%Gem_Fire.get_node("%Taking").text = "+" + str(fire_taking)
-			%Gem_Fire.get_node("%Taking").visible = fire_taking > 0
-		"Water":
-			if water_gems <= 0:
-				return
-			
-			takes.append("Water")
-			water_taking += 1
-			water_gems -= 1
-			%Gem_Water.get_node("%Amount").text = str(water_gems)
-			%Gem_Water.get_node("%Taking").text = "+" + str(water_taking)
-			%Gem_Water.get_node("%Taking").visible = water_taking > 0
-		"Grass":
-			if grass_gems <= 0:
-				return
-			
-			takes.append("Grass")
-			grass_taking += 1
-			grass_gems -= 1
-			%Gem_Grass.get_node("%Amount").text = str(grass_gems)
-			%Gem_Grass.get_node("%Taking").text = "+" + str(grass_taking)
-			%Gem_Grass.get_node("%Taking").visible = grass_taking > 0
-		"Electric":
-			if electric_gems <= 0:
-				return
-			
-			takes.append("Electric")
-			electric_taking += 1
-			electric_gems -= 1
-			%Gem_Electric.get_node("%Amount").text = str(electric_gems)
-			%Gem_Electric.get_node("%Taking").text = "+" + str(electric_taking)
-			%Gem_Electric.get_node("%Taking").visible = electric_taking > 0
-		"Psychic":
-			if psychic_gems <= 0:
-				return
-			
-			takes.append("Psychic")
-			psychic_taking += 1
-			psychic_gems -= 1
-			%Gem_Psychic.get_node("%Amount").text = str(psychic_gems)
-			%Gem_Psychic.get_node("%Taking").text = "+" + str(psychic_taking)
-			%Gem_Psychic.get_node("%Taking").visible = psychic_taking > 0
+	var bank_data : Dictionary = bank.to_data()
+	var taking_data : Dictionary = taking.to_data()
+	
+	if bank_data[type] <= 0:
+		return
+	
+	takes.append(type)
+	taking_data[type] += 1
+	bank_data[type] -= 1
+	get_node("%Gem_" + type.capitalize()).get_node("%Amount").text = str(bank_data[type])
+	get_node("%Gem_" + type.capitalize()).get_node("%Taking").text = "+" + str(taking_data[type])
+	get_node("%Gem_" + type.capitalize()).get_node("%Taking").visible = taking_data[type] > 0
+	
+	bank.from_data(bank_data)
+	taking.from_data(taking_data)
 	
 	gems_taken += 1
 
 func _on_putback_gem(type: String) -> void:
-	match type:
-		"Fire":
-			if fire_taking <= 0:
-				return
-			
-			takes.erase("Fire")
-			
-			fire_taking -= 1
-			fire_gems += 1
-			%Gem_Fire.get_node("%Amount").text = str(fire_gems)
-			%Gem_Fire.get_node("%Taking").text = "+" + str(fire_taking)
-			%Gem_Fire.get_node("%Taking").visible = fire_taking > 0
-		"Water":
-			if water_taking <= 0:
-				return
-			
-			takes.erase("Water")
-			
-			water_taking -= 1
-			water_gems += 1
-			%Gem_Water.get_node("%Amount").text = str(water_gems)
-			%Gem_Water.get_node("%Taking").text = "+" + str(water_taking)
-			%Gem_Water.get_node("%Taking").visible = water_taking > 0
-		"Grass":
-			if grass_taking <= 0:
-				return
-			
-			takes.erase("Grass")
-			
-			grass_taking -= 1
-			grass_gems += 1
-			%Gem_Grass.get_node("%Amount").text = str(grass_gems)
-			%Gem_Grass.get_node("%Taking").text = "+" + str(grass_taking)
-			%Gem_Grass.get_node("%Taking").visible = grass_taking > 0
-		"Electric":
-			if electric_taking <= 0:
-				return
-			
-			takes.erase("Electric")
-			
-			electric_taking -= 1
-			electric_gems += 1
-			%Gem_Electric.get_node("%Amount").text = str(electric_gems)
-			%Gem_Electric.get_node("%Taking").text = "+" + str(electric_taking)
-			%Gem_Electric.get_node("%Taking").visible = electric_taking > 0
-		"Psychic":
-			if psychic_taking <= 0:
-				return
-			
-			takes.erase("Psychic")
-			
-			psychic_taking -= 1
-			psychic_gems += 1
-			%Gem_Psychic.get_node("%Amount").text = str(psychic_gems)
-			%Gem_Psychic.get_node("%Taking").text = "+" + str(psychic_taking)
-			%Gem_Psychic.get_node("%Taking").visible = psychic_taking > 0
+	var bank_data : Dictionary = bank.to_data()
+	var taking_data : Dictionary = taking.to_data()
+	
+	if taking_data[type] <= 0:
+		return
+	
+	takes.erase(type)
+	taking_data[type] -= 1
+	bank_data[type] += 1
+	
+	get_node("%Gem_" + type.capitalize()).get_node("%Amount").text = str(bank_data[type])
+	get_node("%Gem_" + type.capitalize()).get_node("%Taking").text = "+" + str(taking_data[type])
+	get_node("%Gem_" + type.capitalize()).get_node("%Taking").visible = taking_data[type] > 0
+	
+	bank.from_data(bank_data)
+	taking.from_data(taking_data)
 	
 	gems_taken -= 1
 
@@ -438,7 +369,7 @@ func _on_select_card(card: Card, held: bool = false) -> void:
 	var data : CardData = selected_card.data
 	%Buy.disabled = not data.can_afford(current_player)
 	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE \
-		or gold <= 0 \
+		or bank.gold <= 0 \
 		or held \
 		or current_player.get_gem_total() >= MAX_GEMS_PER_PLAYER
 
@@ -488,7 +419,7 @@ func _on_hold() -> void:
 	if not selected_card and not selected_deck:
 		return
 	
-	if gold <= 0:
+	if bank.gold <= 0:
 		return
 	
 	if selected_card != null:
@@ -550,7 +481,7 @@ func _on_select_deck(deck: Control) -> void:
 	
 	%Buy.disabled = true
 	%Hold.disabled = current_player.deck.size() >= PLAYER_MAX_DECK_SIZE \
-		or gold <= 0 \
+		or bank.gold <= 0 \
 		or current_player.get_gem_total() >= MAX_GEMS_PER_PLAYER
 	
 	if deck == %T1:
@@ -577,23 +508,11 @@ func _on_end_turn() -> void:
 	%Gem_Electric.get_node("%Taking").visible = false
 	%Gem_Psychic.get_node("%Taking").visible = false
 	
-	var visual : GamePlayer = player_to_visual[current_player] as GamePlayer
-	if fire_taking > 0:
-		current_player.fire_gems += fire_taking
-	if water_taking > 0:
-		current_player.water_gems += water_taking
-	if grass_taking > 0:
-		current_player.grass_gems += grass_taking
-	if electric_taking > 0:
-		current_player.electric_gems += electric_taking
-	if psychic_taking > 0:
-		current_player.psychic_gems += psychic_taking
+	taking.add_to(current_player.bank)
 	
-	fire_taking = 0
-	water_taking = 0
-	grass_taking = 0
-	electric_taking = 0
-	psychic_taking = 0
+	var visual : GamePlayer = player_to_visual[current_player] as GamePlayer
+	
+	taking = GemBank.new()
 	
 	spread_take = false
 	bad_dip = false
@@ -608,12 +527,12 @@ func _on_end_turn() -> void:
 	_next_player()
 
 func update() -> void:
-	%Gem_Gold.get_node("%Amount").text = str(gold)
-	%Gem_Fire.get_node("%Amount").text = str(fire_gems)
-	%Gem_Water.get_node("%Amount").text = str(water_gems)
-	%Gem_Grass.get_node("%Amount").text = str(grass_gems)
-	%Gem_Electric.get_node("%Amount").text = str(electric_gems)
-	%Gem_Psychic.get_node("%Amount").text = str(psychic_gems)
+	%Gem_Gold.get_node("%Amount").text = str(bank.gold)
+	%Gem_Fire.get_node("%Amount").text = str(bank.fire_gems)
+	%Gem_Water.get_node("%Amount").text = str(bank.water_gems)
+	%Gem_Grass.get_node("%Amount").text = str(bank.grass_gems)
+	%Gem_Electric.get_node("%Amount").text = str(bank.electric_gems)
+	%Gem_Psychic.get_node("%Amount").text = str(bank.psychic_gems)
 	
 	%T1.get_node("%Amount").text = str(t1_pool.size())
 	%T2.get_node("%Amount").text = str(t2_pool.size())

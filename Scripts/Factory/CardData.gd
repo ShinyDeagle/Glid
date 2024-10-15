@@ -42,6 +42,10 @@ static func load_database() -> void:
 		index += 1
 		Main.inst().debug("Card Data", "Loaded Card #" + str(index - DATABASE_DUMMY_ROWS) + " - " \
 			+ "ID: " + str(card.card_id), Main.DEBUG_LEVEL.DATA)
+	
+	var last_card : CardData = all_cards.pop_back() as CardData
+	card_map.erase(last_card.card_id)
+	
 	Main.inst().debug("Card Data", "Loaded " + str(index - DATABASE_DUMMY_ROWS) \
 		+ " Cards", Main.DEBUG_LEVEL.DATA)
 
@@ -64,19 +68,22 @@ static func _generate(data: Array[String]) -> CardData:
 	
 	return card
 
+func get_cost_data() -> Dictionary:
+	return {
+		"Fire": card_fire_cost,
+		"Water": card_water_cost,
+		"Grass": card_grass_cost,
+		"Electric": card_electric_cost,
+		"Psychic": card_psychic_cost,
+	}
+
 func can_afford(who: Player) -> bool:
 	if who == null:
 		return false
+	var player : Player = Session.inst().current_player
+	var full_bank : GemBank = GemBank.new()
 	
-	var fire_to_pay : int = max(0, card_fire_cost - who.fire_cards - who.fire_gems)
-	var water_to_pay : int = max(0, card_water_cost - who.water_cards - who.water_gems)
-	var grass_to_pay : int = max(0, card_grass_cost - who.grass_cards - who.grass_gems)
-	var electric_to_pay : int = max(0, card_electric_cost - who.electric_cards - who.electric_gems)
-	var psychic_to_pay : int = max(0, card_psychic_cost - who.psychic_cards - who.psychic_gems)
-	var leftover : int = fire_to_pay + \
-		water_to_pay + \
-		grass_to_pay + \
-		electric_to_pay + \
-		psychic_to_pay
+	player.bank.add_to(full_bank)
+	player.card_bank.add_to(full_bank)
 	
-	return not (leftover > 0 and who.gold < leftover)
+	return full_bank.can_afford(get_cost_data())

@@ -22,18 +22,19 @@ func _update() -> void:
 	
 	_update_points()
 	
-	_update_gem(%Player_Gem_Gold, player.gold)
-	_update_gem(%Player_Gem_Fire, player.fire_gems)
-	_update_gem(%Player_Gem_Water, player.water_gems)
-	_update_gem(%Player_Gem_Grass, player.grass_gems)
-	_update_gem(%Player_Gem_Electric, player.electric_gems)
-	_update_gem(%Player_Gem_Psychic, player.psychic_gems)
+	_update_gem(%Player_Gem_Gold, player.bank.gold)
+	_update_gem(%Player_Gem_Fire, player.bank.fire_gems)
+	_update_gem(%Player_Gem_Water, player.bank.water_gems)
+	_update_gem(%Player_Gem_Grass, player.bank.grass_gems)
+	_update_gem(%Player_Gem_Electric, player.bank.electric_gems)
+	_update_gem(%Player_Gem_Psychic, player.bank.psychic_gems)
 	
-	_update_stash(%Stash_Fire, player.fire_cards)
-	_update_stash(%Stash_Water, player.water_cards)
-	_update_stash(%Stash_Grass, player.grass_cards)
-	_update_stash(%Stash_Electric, player.electric_cards)
-	_update_stash(%Stash_Psychic, player.psychic_cards)
+	# It says gems but this updates the player's card bank instead!
+	_update_stash(%Stash_Fire, player.card_bank.fire_gems)
+	_update_stash(%Stash_Water, player.card_bank.water_gems)
+	_update_stash(%Stash_Grass, player.card_bank.grass_gems)
+	_update_stash(%Stash_Electric, player.card_bank.electric_gems)
+	_update_stash(%Stash_Psychic, player.card_bank.psychic_gems)
 	
 	_update_deck()
 	toggle_deck(false)
@@ -66,32 +67,15 @@ func buy_card(what: Card) -> bool:
 	if not data.can_afford(player):
 		return false
 	
-	var fire_to_pay : int = max(0, data.card_fire_cost - player.fire_cards)
-	var water_to_pay : int = max(0, data.card_water_cost - player.water_cards)
-	var grass_to_pay : int = max(0, data.card_grass_cost - player.grass_cards)
-	var electric_to_pay : int = max(0, data.card_electric_cost - player.electric_cards)
-	var psychic_to_pay : int = max(0, data.card_psychic_cost - player.psychic_cards)
+	var card_bank : GemBank = GemBank.new()
+	card_bank.from_data(what.data.get_cost_data())
 	
-	var gold_cost : int = (max(0, fire_to_pay - player.fire_gems)) + \
-		(max(0, water_to_pay - player.water_gems)) + \
-		(max(0, grass_to_pay - player.grass_gems)) + \
-		(max(0, electric_to_pay - player.electric_gems)) + \
-		(max(0, psychic_to_pay - player.psychic_gems))
+	var difference : GemBank = player.bank.difference(card_bank)
 	
-	Session.inst().gold += gold_cost
-	Session.inst().fire_gems += min(player.fire_gems, fire_to_pay)
-	Session.inst().water_gems += min(player.water_gems, water_to_pay)
-	Session.inst().grass_gems += min(player.grass_gems, grass_to_pay)
-	Session.inst().electric_gems += min(player.electric_gems, electric_to_pay)
-	Session.inst().psychic_gems += min(player.psychic_gems, psychic_to_pay)
+	difference.add_to(Session.bank)
 	Session.inst().update()
 	
-	player.fire_gems = clampi(player.fire_gems - fire_to_pay, 0, 4)
-	player.water_gems = clampi(player.water_gems - water_to_pay, 0, 4)
-	player.grass_gems = clampi(player.grass_gems - grass_to_pay, 0, 4)
-	player.electric_gems = clampi(player.electric_gems - electric_to_pay, 0, 4)
-	player.psychic_gems = clampi(player.psychic_gems - psychic_to_pay, 0, 4)
-	player.gold -= max(0, gold_cost)
+	player.bank.buy(data.get_cost_data())
 	
 	player.points += data.card_points
 	
@@ -101,17 +85,18 @@ func buy_card(what: Card) -> bool:
 	return true
 
 func _on_card_bought(card: CardData) -> void:
+	# It says gems but this updates the player's card bank instead.
 	match card.card_type:
 		"Fire":
-			player.fire_cards += 1
+			player.card_bank.fire_gems += 1
 		"Water":
-			player.water_cards += 1
+			player.card_bank.water_gems += 1
 		"Grass":
-			player.grass_cards += 1
+			player.card_bank.grass_gems += 1
 		"Electric":
-			player.electric_cards += 1
+			player.card_bank.electric_gems += 1
 		"Psychic":
-			player.psychic_cards += 1
+			player.card_bank.psychic_gems += 1
 
 func hold_card(card: Card) -> bool:
 	if player.deck.size() >=  Session.PLAYER_MAX_DECK_SIZE:

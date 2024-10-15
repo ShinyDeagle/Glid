@@ -11,32 +11,19 @@ func update() -> void:
 	%Points.text = str(data.noble_points)
 	%Points.visible = data.noble_points > 0
 	
-	if data.noble_fire_cost > 0:
-		var cost : Control = AssetLoader.GEM_STASH["Fire"].instantiate() as Control
-		%Costs.add_child(cost)
+	var cost_data : Dictionary = data.get_cost_data()
+	for type in cost_data:
+		var amount : int = cost_data[type] as int
 		
-		cost.get_node("%Amount").text = str(data.noble_fire_cost)
+		if amount > 0:
+			var cost : Control = AssetLoader.GEM_STASH[type].instantiate() as Control
+			%Costs.add_child(cost)
+			
+			cost.get_node("%Amount").text = str(amount)
 	
-	if data.noble_water_cost > 0:
-		var cost : Control = AssetLoader.GEM_STASH["Water"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Amount").text = str(data.noble_water_cost)
-	
-	if data.noble_grass_cost > 0:
-		var cost : Control = AssetLoader.GEM_STASH["Grass"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Amount").text = str(data.noble_grass_cost)
-	
-	if data.noble_electric_cost > 0:
-		var cost : Control = AssetLoader.GEM_STASH["Electric"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Amount").text = str(data.noble_electric_cost)
-	
-	if data.noble_psychic_cost > 0:
-		var cost : Control = AssetLoader.GEM_STASH["Psychic"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Amount").text = str(data.noble_psychic_cost)
+	refresh_modulation()
+
+func refresh_modulation() -> void:
+	modulate = Color.WHITE.darkened(0.35) \
+		if not Session.inst().current_player.card_bank.can_afford(data.get_cost_data()) else \
+		Color.WHITE

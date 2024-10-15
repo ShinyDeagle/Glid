@@ -40,6 +40,10 @@ static func load_database() -> void:
 		index += 1
 		Main.inst().debug("Noble Data", "Loaded Noble #" + str(index - DATABASE_DUMMY_ROWS) + " - " \
 			+ "ID: " + str(noble.noble_id), Main.DEBUG_LEVEL.DATA)
+	
+	var last_noble : NobleData = all_nobles.pop_back() as NobleData
+	noble_map.erase(last_noble.noble_id)
+	
 	Main.inst().debug("Noble Data", "Loaded " + str(index - DATABASE_DUMMY_ROWS) \
 		+ " Nobles", Main.DEBUG_LEVEL.DATA)
 
@@ -60,19 +64,23 @@ static func _generate(data: Array[String]) -> NobleData:
 	
 	return noble
 
+func get_cost_data() -> Dictionary:
+	return {
+		"Fire": noble_fire_cost,
+		"Water": noble_water_cost,
+		"Grass": noble_grass_cost,
+		"Electric": noble_electric_cost,
+		"Psychic": noble_psychic_cost,
+	}
+
 func can_afford(who: Player) -> bool:
 	if who == null:
 		return false
 	
-	var missing_fire : int = max(0, noble_fire_cost - who.fire_cards)
-	var missing_water : int = max(0, noble_water_cost - who.water_cards)
-	var missing_grass : int = max(0, noble_grass_cost - who.grass_cards)
-	var missing_electric : int = max(0, noble_electric_cost - who.electric_cards)
-	var missing_psychic : int = max(0, noble_psychic_cost - who.psychic_cards)
-	var missing : int =  missing_fire \
-		+ missing_water \
-		+ missing_grass \
-		+ missing_electric \
-		+ missing_psychic
+	var bank : Dictionary = who.bank.to_data()
+	var cost_data : Dictionary = get_cost_data()
+	for type in cost_data:
+		if cost_data[type] > bank[type]:
+			return false
 	
-	return missing <= 0
+	return true

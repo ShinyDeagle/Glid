@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=3 uid="uid://eyaqe0owntkc"]
 
-[ext_resource type="Script" path="res://Scenes/Game/Session.gd" id="1_ep0gm"]
+[ext_resource type="Script" path="res://Scripts/Game/Session.gd" id="1_ep0gm"]
 [ext_resource type="PackedScene" uid="uid://hnci44c8shhb" path="res://Scenes/Game/Player.tscn" id="1_ki1s4"]
 [ext_resource type="PackedScene" uid="uid://nh7jhv57lm1w" path="res://Scenes/Game/Deck.tscn" id="1_ltllm"]
 [ext_resource type="PackedScene" uid="uid://blahpjlpjlsi2" path="res://Scenes/Game/Card.tscn" id="1_ot707"]

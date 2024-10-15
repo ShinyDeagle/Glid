@@ -5,22 +5,12 @@ extends RefCounted
 var id : int = randi()
 var username : String = "Player"
 
-var fire_gems : int = 0
-var water_gems : int = 0
-var grass_gems : int = 0
-var electric_gems : int = 0
-var psychic_gems : int = 0
+var bank : GemBank = GemBank.new()
+var card_bank : GemBank = GemBank.new()
 
-var fire_cards : int = 0
-var water_cards : int = 0
-var grass_cards : int = 0
-var electric_cards : int = 0
-var psychic_cards : int = 0
-
-var gold : int = 0
 var points : int = 0
 
 var deck : Array[CardData] = []
 
 func get_gem_total() -> int:
-	return gold + fire_gems + water_gems + grass_gems + electric_gems + psychic_gems
+	return bank.gold + bank.fire_gems + bank.water_gems + bank.grass_gems + bank.electric_gems + bank.psychic_gems

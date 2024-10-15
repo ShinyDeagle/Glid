@@ -20,32 +20,25 @@ func update() -> void:
 	%Foreground.self_modulate = modulate_color
 	%Highlight.self_modulate = modulate_color
 	
-	if data.card_fire_cost > 0:
-		var cost : Control = AssetLoader.GEM_COST["Fire"].instantiate() as Control
-		%Costs.add_child(cost)
+	var cost_data : Dictionary = data.get_cost_data()
+	for type in cost_data:
+		var amount : int = cost_data[type] as int
 		
-		cost.get_node("%Cost").text = str(data.card_fire_cost)
+		if amount > 0:
+			var cost : Control = AssetLoader.GEM_COST[type].instantiate() as Control
+			%Costs.add_child(cost)
+			
+			cost.get_node("%Cost").text = str(amount)
 	
-	if data.card_water_cost > 0:
-		var cost : Control = AssetLoader.GEM_COST["Water"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Cost").text = str(data.card_water_cost)
+	refresh_modulation()
+
+func refresh_modulation() -> void:
+	var player : Player = Session.inst().current_player
+	var full_bank : GemBank = GemBank.new()
 	
-	if data.card_grass_cost > 0:
-		var cost : Control = AssetLoader.GEM_COST["Grass"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Cost").text = str(data.card_grass_cost)
+	player.bank.add_to(full_bank)
+	player.card_bank.add_to(full_bank)
 	
-	if data.card_electric_cost > 0:
-		var cost : Control = AssetLoader.GEM_COST["Electric"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Cost").text = str(data.card_electric_cost)
-	
-	if data.card_psychic_cost > 0:
-		var cost : Control = AssetLoader.GEM_COST["Psychic"].instantiate() as Control
-		%Costs.add_child(cost)
-		
-		cost.get_node("%Cost").text = str(data.card_psychic_cost)
+	modulate = Color.WHITE.darkened(0.35) \
+		if not full_bank.can_afford(data.get_cost_data()) else \
+		Color.WHITE
