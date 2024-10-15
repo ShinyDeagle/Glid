@@ -70,6 +70,7 @@ func buy_card(what: Card) -> bool:
 	var card_bank : GemBank = GemBank.new()
 	card_bank.from_data(what.data.get_cost_data())
 	
+	# TODO: Make the player's bank take into account the cards he has.
 	var difference : GemBank = player.bank.difference(card_bank)
 	
 	difference.add_to(Session.bank)
